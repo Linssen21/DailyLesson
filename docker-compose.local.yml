@@ -1,0 +1,66 @@
+version: '3'
+
+networks:
+  local-dev-network:
+    driver: bridge
+
+services:
+
+  #PHP Service
+  laravel-api:
+    build: 
+      context: .
+      dockerfile: config/Docker/Dockerfile.php
+    container_name: laravel-api
+    restart: unless-stopped
+    tty: true
+    environment:
+      SERVICE_NAME: laravel-api
+      SERVICE_TAGS: dev
+    working_dir: /var/www
+    volumes:
+      - ./source/laravel-api:/var/www
+      - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      # - ./config/php/php-fpm.ini:/usr/local/etc/php-fpm.d/www.conf # PHP-FPM config file
+    ports: 
+      - "${PHP_HOST_PORT}:${PHP_DOCKER_CONTAINER_PORT}"
+    networks:
+      - local-dev-network
+
+  #Nginx Service
+  nginx-webserver:
+    image: nginx:alpine
+    container_name: nginx-webserver
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "81:80"
+      - "443:443"
+    volumes:
+      - ./source/laravel-api:/var/www
+      - ./config/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - laravel-api
+      - mysql
+    networks:
+      - local-dev-network
+
+  #MySQL Service
+  mysql:
+    container_name: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    build:
+      context: .
+      dockerfile: config/Docker/Dockerfile.mysql
+    environment:
+      MYSQL_DATABASE: ${DATABASE}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+    ports:
+      - "${DB_HOST_PORT}:${DB_DOCKER_CONTAINER_PORT}"
+    volumes:
+      - ./data/persistence:/var/lib/mysql
+    networks:
+      - local-dev-network
+

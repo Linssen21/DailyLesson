@@ -1,0 +1,4 @@
+.env
+data/persistence
+source/laravel-api/.env
+Notes.txt
