@@ -33,12 +33,16 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
 
 # Install Xdebug
-RUN pecl install xdebug && \
-    docker-php-ext-enable xdebug
+RUN pecl install xdebug
+    
+# Copy and add OpCache configuration
+COPY config/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
+# Copy and add Xdebug configuration
+COPY config/php/xdebug.ini /usr/local/etc/php/conf.d/xdebug.ini
 
 # Copy composer files and install dependencies
 COPY source/laravel-api/composer.json source/laravel-api/composer.lock ./
-RUN composer install --no-dev --no-scripts --no-autoloader
+# RUN composer install --no-dev --no-scripts --no-autoloader
 
 # Copy laravel-api source
 COPY source/laravel-api /var/www
@@ -47,7 +51,7 @@ COPY source/laravel-api /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Install Composer dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --no-scripts --optimize-autoloader
 
 # Generate optimized autoload files
 RUN composer dump-autoload --no-dev --optimize
@@ -56,7 +60,7 @@ RUN composer dump-autoload --no-dev --optimize
 RUN chown -R www-data:www-data storage bootstrap/cache
 
 # Run database migrations
-RUN php artisan migrate --force
+# RUN php artisan migrate --force
 
 # Expose port 9000 to communicate with Nginx or other web server
 EXPOSE 9000 9001 9003

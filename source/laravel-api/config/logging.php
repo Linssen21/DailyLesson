@@ -127,6 +127,14 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
 
+        'applog' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/applog/laravel.log'),
+            'tap' => [App\Logging\LogFormatter::class],
+            'level' => env('LOG_LEVEL', 'debug'),
+            'days' => 7,
+            'permission' => 0777
+        ]
     ],
 
 ];

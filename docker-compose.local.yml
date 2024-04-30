@@ -8,7 +8,7 @@ services:
 
   #PHP Service
   laravel-api:
-    build: 
+    build:
       context: .
       dockerfile: config/Docker/Dockerfile.php
     container_name: laravel-api
@@ -20,9 +20,30 @@ services:
     working_dir: /var/www
     volumes:
       - ./source/laravel-api:/var/www
+      - ./source/laravel-api/app:/var/www/app
+      - ./source/laravel-api/bootstrap:/var/www/bootstrap
+      - ./source/laravel-api/composer.lock:/var/www/composer.lock
+      - ./source/laravel-api/database:/var/www/database
+      - ./source/laravel-api/phpunit.xml:/var/www/phpunit.xml
+      - ./source/laravel-api/routes:/var/www/routes
+      - ./source/laravel-api/tests:/var/www/tests
+      - ./source/laravel-api/vite.config.js:/var/www/vite.config.js
+      - ./source/laravel-api/artisan:/var/www/artisan
+      - ./source/laravel-api/composer.json:/var/www/composer.json
+      - ./source/laravel-api/config:/var/www/config
+      - ./source/laravel-api/package.json:/var/www/package.json
+      - ./source/laravel-api/public:/var/www/public
+      - ./source/laravel-api/resources:/var/www/resources
+      - ./source/laravel-api/storage:/var/www/storage
+
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
+      - /path/to/source/laravel-api/vendor:/var/www/vendor # Remove this line if you want to include vendor
+      - ./config/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
+      - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       # - ./config/php/php-fpm.ini:/usr/local/etc/php-fpm.d/www.conf # PHP-FPM config file
-    ports: 
+    depends_on:
+      - mysql
+    ports:
       - "${PHP_HOST_PORT}:${PHP_DOCKER_CONTAINER_PORT}"
     networks:
       - local-dev-network
@@ -63,4 +84,3 @@ services:
       - ./data/persistence:/var/lib/mysql
     networks:
       - local-dev-network
-
