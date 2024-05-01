@@ -37,7 +37,7 @@ services:
       - ./source/laravel-api/storage:/var/www/storage
 
       - ./config/php/local.ini:/usr/local/etc/php/conf.d/local.ini
-      - /path/to/source/laravel-api/vendor:/var/www/vendor # Remove this line if you want to include vendor
+      # - /path/to/source/laravel-api/vendor:/var/www/vendor # Remove this line if you want to include vendor
       - ./config/php/opcache.ini:/usr/local/etc/php/conf.d/opcache.ini
       - ./config/php/xdebug.ini:/usr/local/etc/php/conf.d/xdebug.ini
       # - ./config/php/php-fpm.ini:/usr/local/etc/php-fpm.d/www.conf # PHP-FPM config file

@@ -63,12 +63,18 @@ class LogFormatter
      * Set remote address of visitor check if request is available
      * request available if true: return ip. if false: return unknown
      *
+     * @ticket Feature/DL-1
+     * @param Request|null $request
+     *
      * @return void
      */
-    public function setRemoteAddr(): void
+    public function setRemoteAddr(?Request $request = null): void
     {
-        $request = app(Request::class);
-        $this->strRemoteAddr = $request ? $request->ip() : "unknown";
+        if ($request && $request->hasHeader('X-Forwarded-For')) {
+            $this->strRemoteAddr = $request->header('X-Forwarded-For');
+        } else {
+            $this->strRemoteAddr = $request ? $request->ip() : "unknown";
+        }
     }
 
     /**
@@ -83,7 +89,7 @@ class LogFormatter
 
     public function __invoke(Logger $logger): void
     {
-        $this->setRemoteAddr();
+        $this->setRemoteAddr(app(Request::class));
 
         $aryCols = [
             "[%datetime%]",

@@ -26,7 +26,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libwebp-dev \
     libfreetype6-dev
-    
+
 RUN docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 RUN docker-php-ext-install gd
 RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
@@ -34,7 +34,7 @@ RUN docker-php-ext-configure gd --with-freetype --with-jpeg --with-webp
 
 # Install Xdebug
 RUN pecl install xdebug
-    
+
 # Copy and add OpCache configuration
 COPY config/php/opcache.ini /usr/local/etc/php/conf.d/opcache.ini
 # Copy and add Xdebug configuration
@@ -51,10 +51,11 @@ COPY source/laravel-api /var/www
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # Install Composer dependencies
-RUN composer install --no-dev --no-scripts --optimize-autoloader
+# RUN composer install --no-dev --no-scripts --optimize-autoloader
 
 # Generate optimized autoload files
-RUN composer dump-autoload --no-dev --optimize
+# RUN composer dump-autoload --no-dev --optimize
+RUN composer install --optimize-autoloader
 
 # Set permissions for Laravel storage and bootstrap cache
 RUN chown -R www-data:www-data storage bootstrap/cache
