@@ -1,15 +1,13 @@
 <?php
 
+use App\Http\Controllers\Web\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::middleware(['web'])->group(function () {
+    Route::get('/', function () {
+        return view('welcome');
+    });
 
-Route::get('/helloworld', function () {
-    return response()->json(['test' => 'Hello World']);
-});
-
-Route::get('/phpini', function () {
-    return phpinfo();
+    Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verificationEmail'])
+        ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 });
