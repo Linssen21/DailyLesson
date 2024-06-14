@@ -59,7 +59,7 @@ services:
       - "443:443"
     volumes:
       - ./source/laravel-api:/var/www
-      - ./config/nginx/conf.d/:/etc/nginx/conf.d/
+      - ./config/nginxserver/conf.d/:/etc/nginx/conf.d/
     depends_on:
       - laravel-api
       - mysql
