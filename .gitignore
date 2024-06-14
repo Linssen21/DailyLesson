@@ -2,3 +2,5 @@
 data/persistence
 source/laravel-api/.env
 Notes.txt
+source/laravel-api/_ide_helper_models.php
+source/laravel-api/_ide_helper.php
