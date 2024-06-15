@@ -50,7 +50,9 @@ services:
 
   #Nginx Service
   nginx-webserver:
-    image: nginx:alpine
+    build:
+      context: .
+      dockerfile: config/Docker/Dockerfile.nginxserver
     container_name: nginx-webserver
     restart: unless-stopped
     tty: true

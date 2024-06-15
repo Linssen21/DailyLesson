@@ -37,6 +37,13 @@
 # Creating a command 
  - php artisan make:command CreateAdmin
 
+# Telescope
+ Run the rollback
+ - php artisan migrate:rollback --step=1 --path=database/migrations/2024_06_10_103642_create_telescope_entries_table.php
+ Re run the migration
+ - php artisan migrate --path=database/migrations/2024_06_10_103642_create_telescope_entries_table.php
+
+
 # Deployment
  - Disable xDebug
  - Set Environment variable APP_DEBUG=false

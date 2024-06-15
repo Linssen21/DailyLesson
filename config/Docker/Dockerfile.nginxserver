@@ -1,0 +1,7 @@
+# Use the official NGINX image as a base
+FROM nginx:alpine
+
+RUN mkdir -p /etc/nginx/ssl/
+# Copy custom NGINX configuration files
+COPY ./config/nginxserver/cert/ /etc/nginx/ssl/
+COPY ./config/nginxserver/conf.d/ /etc/nginx/conf.d/
