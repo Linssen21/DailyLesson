@@ -53,10 +53,7 @@ class UserController extends Controller
     {
         $aryRegRes = $this->userService->registration($registerRequest->toDto());
         $intStatus = $aryRegRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json([
-            'status' => $aryRegRes['status'],
-            'message' => $aryRegRes['message'],
-        ], $intStatus);
+        return response()->json($aryRegRes, $intStatus);
     }
 
     public function logout(Request $request): JsonResponse
@@ -64,10 +61,7 @@ class UserController extends Controller
         $strToken = $request->bearerToken();
         $aryRes = $this->userService->revokeToken($strToken);
         $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json([
-            'status' => $aryRes['status'],
-            'message' => $aryRes['message'],
-        ], $intStatus);
+        return response()->json($aryRes, $intStatus);
     }
 
     /**
@@ -81,11 +75,7 @@ class UserController extends Controller
     private function authResponse(array $aryData): JsonResponse
     {
         $intStatus = $aryData['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json([
-            'status' => $aryData['status'],
-            'message' => $aryData['message'],
-            'token' => $aryData['token']
-        ], $intStatus);
+        return response()->json($aryData, $intStatus);
     }
 
     /**
@@ -102,11 +92,42 @@ class UserController extends Controller
         $aryRes = $this->userService->sendVerification($email);
 
         $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json([
-            'status' => $aryRes['status'],
-            'message' => $aryRes['message']
-        ], $intStatus);
+        return response()->json($aryRes, $intStatus);
     }
 
+    /**
+     * Redirect to social provider
+     *
+     * @ticket Feature/DL-3
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function redirect(Request $request): JsonResponse
+    {
+        $provider = $request->route('provider');
+        $aryRes = $this->userService->redirectToProvider($provider);
+
+        $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 400;
+        return response()->json($aryRes, $intStatus);
+    }
+
+
+    /**
+     * Execute callback provider
+     *
+     * @ticket Feature/DL-3
+     *
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function callback(Request $request): JsonResponse
+    {
+        $provider = $request->route('provider');
+        $aryRes = $this->userService->handleProviderCallback($provider);
+
+        $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 400;
+        return response()->json($aryRes, $intStatus);
+    }
 
 }

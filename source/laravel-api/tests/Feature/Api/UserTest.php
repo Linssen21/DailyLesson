@@ -141,4 +141,45 @@ class UserTest extends TestCase
             'message' => 'Unauthenticated.',
         ]);
     }
+
+    public function test_social_redirect_google(): void
+    {
+        $response = $this->getJson('/api/v2/auth/redirect/google');
+        $url = $response->json('url');
+
+        $response->assertOk();
+        $response->assertJson([
+            'url' => $url,
+            'message' => 'Url is generated',
+            'status' => true
+        ]);
+        $this->assertStringStartsWith('https://accounts.google.com/', $url);
+    }
+
+    public function test_social_redirect_facebook(): void
+    {
+        $response = $this->getJson('/api/v2/auth/redirect/facebook');
+        $url = $response->json('url');
+
+        $response->assertOk();
+        $response->assertJson([
+            'url' => $url,
+            'message' => 'Url is generated',
+            'status' => true
+        ]);
+        $this->assertStringStartsWith('https://www.facebook.com/', $url);
+    }
+
+    public function test_social_redirect_failing(): void
+    {
+        $response = $this->getJson('/api/v2/auth/redirect/failing');
+
+        $response->assertBadRequest();
+        $response->assertJson([
+            'url' => '',
+            'message' => 'Provider is not supported',
+            'status' => false
+        ]);
+    }
+
 }

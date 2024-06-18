@@ -35,7 +35,7 @@ return new class () extends Migration {
             Schema::create('users', function (Blueprint $table) {
                 $table->id()->unsigned()->comment('user id');
                 $table->string('name', 255)->unique()->comment('Name of the user');
-                $table->string('password', 100)->comment('user password');
+                $table->string('password', 100)->nullable()->comment('user password');
                 $table->string('email', 100)->unique()->comment('user email address');
                 $table->timestamp('email_verified_at')->nullable()->comment('user account verification date');
                 $table->timestamp('registered_date')->nullable()->comment('user registered date');

@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace App\Domains\User\Service;
 
+use App\Domains\User\Contracts\UserMetaRepository;
 use App\Domains\User\Contracts\UserRepository;
 use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\DTO\UserCreateDTO;
+use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\User;
+use App\Domains\User\ValueObjects\Status;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Socialite\Two\User as UserSocialite;
 
 /**
  * User Domain Service
@@ -26,6 +31,7 @@ class UserService
 
     public function __construct(
         private UserRepository $userRepository,
+        private UserMetaRepository $userMetaRepository
     ) {
         $this->apiToken = config('constants.API_TOKEN');
     }
@@ -125,6 +131,61 @@ class UserService
 
         $user->sendEmailVerificationNotification();
         return true;
+    }
+
+    /**
+     * Authenticate user by social media and return token
+     *
+     * @param string $provider
+     * @param UserSocialite $socialUser
+     * @return string
+     */
+    public function registerWithSocial(string $provider, UserSocialite $socialUser): string
+    {
+        // Check by user_meta
+        $socialMeta = $this->userMetaRepository->fetchBySocialMeta('user_social', $provider, $socialUser->getId());
+
+        if ($socialMeta) {
+            $socialMeta->delete();
+            $existUser = $this->userRepository->getByColumn(['email' => $socialUser->getEmail()]);
+            return $this->generateSocialToken($provider, $existUser, $socialUser);
+        }
+
+        $newUser = $this->userRepository->updateOrCreate(
+            ['email' => $socialUser->getEmail()],
+            [
+                'email' => $socialUser->getEmail(),
+                'name' => $socialUser->getName(),
+                'display_name' => $socialUser->getName(),
+                'email_verified_at' => Carbon::now(),
+                'status' => new Status(1)
+            ]
+        );
+
+        return $this->generateSocialToken($provider, $newUser, $socialUser);
+    }
+
+    /**
+     * Generate token for user using social
+     *
+     * @param string $provider
+     * @param User $user
+     * @param UserSocialite $socialUser
+     * @return string
+     */
+    private function generateSocialToken(string $provider, User $user, UserSocialite $socialUser): string
+    {
+        $arySocialMeta = $socialUser->getRaw();
+        $arySocialMeta['provider'] = $provider;
+        $this->userMetaRepository->create(
+            new UserMetaCreateDTO($user->id, 'user_social', json_encode([$arySocialMeta]))
+        );
+
+        if ($user->tokens->isNotEmpty()) {
+            $user->tokens()->delete();
+        }
+
+        return $user->createToken($this->apiToken, ['*'], Carbon::now()->addSeconds($user->expiresIn))->plainTextToken;
     }
 
 }

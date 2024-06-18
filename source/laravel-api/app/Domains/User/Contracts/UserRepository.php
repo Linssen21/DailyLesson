@@ -26,4 +26,5 @@ interface UserRepository
     public function create(UserCreateDTO $userCreateDTO): User;
     public function update(int $intId, array $aryColumn): void;
     public function delete(int $intId): bool;
+    public function updateOrCreate(array $attributes, array $values): User;
 }

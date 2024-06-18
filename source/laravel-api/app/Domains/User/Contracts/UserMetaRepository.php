@@ -19,4 +19,5 @@ use App\Domains\User\UserMeta;
 interface UserMetaRepository
 {
     public function create(UserMetaCreateDTO $userMetaCreateDTO): UserMeta;
+    public function fetchBySocialMeta(string $key, string $provider, string $id): ?UserMeta;
 }
