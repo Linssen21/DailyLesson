@@ -160,4 +160,18 @@ class UserRepository implements UserRepositoryInterface
     {
         return $this->userModel->createUser($userCreateDTO);
     }
+
+    /**
+     * if user exist update else create user
+     *
+     * @ticket Feature/DL-2
+     *
+     * @param array $attributes
+     * @param array $values
+     * @return User
+     */
+    public function updateOrCreate(array $attributes, array $values): User
+    {
+        return $this->userModel->query()->updateOrCreate($attributes, $values);
+    }
 }

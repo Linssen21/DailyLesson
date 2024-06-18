@@ -20,7 +20,15 @@ Route::prefix('v2')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('/login', [UserController::class, 'login']);
         Route::post('/register', [UserController::class, 'register']);
-        Route::post('/logout', [UserController::class, 'logout'])->middleware('auth:sanctum');
+
+        Route::get('/callback/{provider}', [UserController::class, 'callback']);
+        Route::get('/redirect/{provider}', [UserController::class, 'redirect']);
+
+
+        // Protected routes
+        Route::middleware('auth:sanctum')->group(function () {
+            Route::post('/logout', [UserController::class, 'logout']);
+        });
     });
 
     Route::prefix('verify')->group(function () {

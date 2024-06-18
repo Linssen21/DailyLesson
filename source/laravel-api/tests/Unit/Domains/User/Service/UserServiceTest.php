@@ -4,15 +4,20 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Domains\User\Service;
 
+use App\Domains\User\Contracts\UserMetaRepository;
 use App\Domains\User\Contracts\UserRepository;
 use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\DTO\UserCreateDTO;
+use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\Service\UserService;
 use App\Domains\User\User;
-use Carbon\Carbon;
+use App\Domains\User\UserMeta;
+use App\Domains\User\ValueObjects\Status;
 use Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
+use Laravel\Socialite\Two\User as SocialUser;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
@@ -37,18 +42,27 @@ class UserServiceTest extends TestCase
      * @var UserRepository&MockInterface
      */
     private UserRepository $userRepositoryMock;
+    /**
+     * Create a mock user meta repository object, add reference with UserMetaRepository Class and Mock Object class
+     *
+     * @var UserMetaRepository&MockInterface
+     */
+    private UserMetaRepository $userMetaRepositoryMock;
     private PersonalAccessToken $personalAccessTokenMock;
     private UserService $userService;
 
     private User $userMock;
+    private SocialUser $socialUserMock;
+    private Status $statusMock;
+    private UserMeta $userMetaMock;
 
     protected function setUp(): void
     {
         parent::setUp();
         $this->userRepositoryMock = $this->mock(UserRepository::class);
+        $this->userMetaRepositoryMock = $this->mock(UserMetaRepository::class);
         $this->personalAccessTokenMock = $this->mock(PersonalAccessToken::class);
-        $this->userService = new UserService($this->userRepositoryMock);
-
+        $this->userService = new UserService($this->userRepositoryMock, $this->userMetaRepositoryMock);
         $this->createUser();
     }
 
@@ -65,6 +79,19 @@ class UserServiceTest extends TestCase
         $this->userMock->name = 'testname';
         $this->userMock->display_name = 'Test Name';
         $this->userMock->password = 'password';
+    }
+
+    private function prepareSocialUser(): void
+    {
+        $this->socialUserMock = $this->mock(SocialUser::class);
+        $this->statusMock = $this->mock(Status::class);
+        $this->userMetaMock = $this->mock(UserMeta::class);
+        $this->socialUserMock = new SocialUser();
+        $this->socialUserMock->id = '1';
+        $this->socialUserMock->name = 'testname';
+        $this->socialUserMock->email = 'test@test.com';
+        $this->statusMock = new Status(1);
+        Carbon::setTestNow(Carbon::parse('2024-01-01 00:00:00'));
     }
 
     public function test_authentication(): void
@@ -226,6 +253,92 @@ class UserServiceTest extends TestCase
 
         // When
         $this->assertFalse($blnVerify);
+    }
+
+    public function test_register_with_social(): void
+    {
+        // Arrange
+        $provider = 'google';
+        $meta_key = 'user_social';
+        $this->prepareSocialUser();
+
+        $this->userMetaRepositoryMock->shouldReceive('fetchBySocialMeta')
+            ->with($meta_key, $provider, $this->socialUserMock->getId())
+            ->once();
+
+        $this->userRepositoryMock->shouldReceive('updateOrCreate')
+        ->with(
+            ['email' => $this->socialUserMock->getEmail()],
+            [
+            'email' => $this->socialUserMock->getEmail(),
+            'name' => $this->socialUserMock->getName(),
+            'display_name' => $this->socialUserMock->getName(),
+            'email_verified_at' => now(),
+            'status' => $this->statusMock
+            ]
+        )->once()
+        ->andReturn($this->userMock);
+
+        $arySocialMeta = $this->socialUserMock->getRaw();
+        $arySocialMeta['provider'] = $provider;
+
+        $this->userMetaRepositoryMock->shouldReceive('create')
+        ->withArgs(function ($arg) use ($meta_key, $arySocialMeta) {
+            return $arg instanceof UserMetaCreateDTO &&
+            $arg->getUserId() === $this->userMock->id &&
+            $arg->getMetaKey() ===  $meta_key &&
+            $arg->getMetaValue() === json_encode([$arySocialMeta]);
+        })->once();
+
+        // Act
+        $token = $this->userService->registerWithSocial($provider, $this->socialUserMock);
+
+        // When
+        $this->assertNotEmpty($token);
+        $this->assertEquals(1, $this->userMock->tokens()->count());
+    }
+
+    public function test_register_with_existing_social(): void
+    {
+        // Arrange
+        $provider = 'google';
+        $meta_key = 'user_social';
+        $this->prepareSocialUser();
+
+        $arySocialMeta = $this->socialUserMock->getRaw();
+        $arySocialMeta['provider'] = $provider;
+
+        // Mock existing user_social meta
+        $socialMeta = new UserMeta();
+        $socialMeta->user_id = $this->userMock->id;
+        $socialMeta->meta_key = $meta_key;
+        $socialMeta->meta_value = $arySocialMeta;
+
+        $this->userMetaRepositoryMock->shouldReceive('fetchBySocialMeta')
+            ->with($meta_key, $provider, $this->socialUserMock->getId())
+            ->once()
+            ->andReturn($socialMeta);
+
+
+        $this->userRepositoryMock->shouldReceive('getByColumn')
+            ->with(['email' => $this->socialUserMock->getEmail()])
+            ->once()
+            ->andReturn($this->userMock);
+
+        $this->userMetaRepositoryMock->shouldReceive('create')
+        ->withArgs(function ($arg) use ($meta_key, $arySocialMeta) {
+            return $arg instanceof UserMetaCreateDTO &&
+            $arg->getUserId() === $this->userMock->id &&
+            $arg->getMetaKey() ===  $meta_key &&
+            $arg->getMetaValue() === json_encode([$arySocialMeta]);
+        })->once();
+
+        // Act
+        $token = $this->userService->registerWithSocial($provider, $this->socialUserMock);
+
+        // When
+        $this->assertNotEmpty($token);
+        $this->assertEquals(1, $this->userMock->tokens()->count());
     }
 
 

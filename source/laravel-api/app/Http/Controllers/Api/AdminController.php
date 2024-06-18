@@ -41,10 +41,6 @@ class AdminController extends Controller
     private function authResponse(array $aryData): JsonResponse
     {
         $intStatus = $aryData['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json([
-            'status' => $aryData['status'],
-            'message' => $aryData['message'],
-            'token' => $aryData['token']
-        ], $intStatus);
+        return response()->json($aryData, $intStatus);
     }
 }

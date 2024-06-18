@@ -8,6 +8,7 @@ use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\Service\UserService as UserDomainService;
 use Illuminate\Support\Facades\DB;
+use Laravel\Socialite\Facades\Socialite;
 use Log;
 
 /**
@@ -180,5 +181,87 @@ class UserService
                 'status' => config('constants.STATUS_FAILED')
             ];
         }
+    }
+
+    /**
+     * Execute redirect to provider
+     *
+     * @ticket Feature/DL-2
+     *
+     * @param string $provider
+     * @return array
+     */
+    public function redirectToProvider(string $provider): array
+    {
+        if (!in_array($provider, ['google', 'facebook'])) {
+            return [
+                'url' => '',
+                'message' => 'Provider is not supported',
+                'status' => config('constants.STATUS_FAILED')
+            ];
+        }
+
+        /** @disregard uses abstraction and depends on One or Two Implementation */
+        $url = Socialite::driver($provider)->stateless()->redirect()->getTargetUrl();
+
+        return [
+            'url' => $url,
+            'message' => 'Url is generated',
+            'status' => config('constants.STATUS_SUCCESS')
+        ];
+    }
+
+    /**
+     * Undocumented function
+     * 
+     * @ticket Feature/DL-2
+     *
+     * @param string $provider
+     * @return array
+     */
+    public function handleProviderCallback(string $provider): array
+    {
+        try {
+            DB::beginTransaction();
+            if (!in_array($provider, ['google', 'facebook'])) {
+                return [
+                    'url' => '',
+                    'message' => 'Provider is not supported',
+                    'status' => config('constants.STATUS_FAILED')
+                ];
+            }
+
+            /** @disregard uses abstraction and depends on One or Two Implementation */
+            /** @var \Laravel\Socialite\Two\User */
+            $user = Socialite::driver($provider)->stateless()->user();
+
+            $token = $this->userDomainService->registerWithSocial($provider, $user);
+            if (empty($token)) {
+                return [
+                    'token' => '',
+                    'message' => 'Authentication failed, please check your username and password',
+                    'status' => config('constants.STATUS_FAILED')
+                ];
+            }
+            DB::commit();
+            return [
+                'token' => $token,
+                'message' => 'Authentication successful',
+                'status' => config('constants.STATUS_SUCCESS')
+            ];
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            Log::channel('applog')->error(
+                '[Authentication] An error occurred during authentication',
+                ['data' => json_encode($provider), 'message: ' => $th->getMessage()]
+            );
+            return [
+                'token' => '',
+                'message' => 'Authentication failed',
+                'status' => config('constants.STATUS_FAILED')
+            ];
+        }
+
+
     }
 }

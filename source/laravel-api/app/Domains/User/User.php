@@ -15,6 +15,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
@@ -45,7 +46,9 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'email',
         'display_name',
-        'role_id'
+        'role_id',
+        'email_verified_at',
+        'status'
     ];
 
     /**
@@ -225,7 +228,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function markAsVerified(): void
     {
-        $this->email_verified_at = now();
+        $this->email_verified_at = Carbon::now();
         $this->status = new StatusValueObject(StatusValueObject::ACTIVE);
         $this->save();
     }
