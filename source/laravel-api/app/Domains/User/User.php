@@ -16,8 +16,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use RuntimeException;
 
 /**
  * User Entity / Model
@@ -177,8 +177,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @ticket Feature/DL-2
      *
      * @return void
+     * @throws RuntimeException
      */
-    public function changePassword(string $strCurrentPass, string $strPlainTextPass)
+    public function changePassword(string $strPlainTextPass)
     {
         // Since we are saving using this an existed user need's to be selected first before changing password
         if (!$this->exists) {
@@ -255,7 +256,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function softDelete(): void
     {
-        $this->status = new StatusValueObject(StatusValueObject::DELETED);
+        $this->status = new StatusValueObject(3);
         $this->save();
     }
 

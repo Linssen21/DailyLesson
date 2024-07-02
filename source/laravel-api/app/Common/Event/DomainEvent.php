@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Common;
+namespace App\Common\Event;
 
 /**
  * A domain event is something that is unique, but does not have a lifecycle.

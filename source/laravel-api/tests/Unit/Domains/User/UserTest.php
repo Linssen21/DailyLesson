@@ -64,10 +64,9 @@ class UserTest extends TestCase
     {
         // Arrange
         $strPassword = 'new_password';
-        $strCurrentPass = 'new_password';
 
         // Act
-        $this->user->changePassword($strCurrentPass, $strPassword);
+        $this->user->changePassword($strPassword);
 
         // When
         $this->assertTrue(Hash::check($strPassword, $this->user->password));
