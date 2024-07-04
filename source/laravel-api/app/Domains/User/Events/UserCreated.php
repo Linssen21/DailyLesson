@@ -2,7 +2,7 @@
 
 namespace App\Domains\User\Events;
 
-use App\Common\DomainEvent;
+use App\Common\Event\DomainEvent;
 use App\Domains\User\User;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;

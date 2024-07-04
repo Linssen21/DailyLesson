@@ -37,6 +37,7 @@ class Status implements CastsAttributes
      * @param mixed $value
      * @param array $attributes
      * @return integer|null
+     * @throws InvalidArgumentException
      */
     public function set(Model $model, string $key, mixed $value, array $attributes): ?int
     {

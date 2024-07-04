@@ -8,6 +8,10 @@ Route::middleware(['web'])->group(function () {
         return view('welcome');
     });
 
+    Route::get('/phpinfo', function () {
+        return phpinfo();
+    });
+
     Route::get('/email/verify/{id}/{hash}', [UserController::class, 'verificationEmail'])
         ->middleware(['signed', 'throttle:6,1'])->name('verification.verify');
 });
