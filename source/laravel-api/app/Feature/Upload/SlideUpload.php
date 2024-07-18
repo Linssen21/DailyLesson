@@ -45,21 +45,21 @@ class SlideUpload extends FileUpload
      * File upload to storage and file scan
      *
      * @param UploadedFile $file
-     * @return boolean
+     * @return string
      * @throws ScannerException
      */
-    public function upload(UploadedFile $file, string $path): bool
+    public function upload(UploadedFile $file, string $path): string
     {
         $result = $this->getScanner()->scan($file->getPathname());
         if (!$result) {
-            throw new ScannerException("A virus is detectected to this file: " . $file->getFilename());
+            throw new ScannerException("An issue occur scanning this file: " . $file->getFilename());
         }
 
         $fileUrl = $this->getFileStorage()->upload($file, $path);
         if(empty($fileUrl)) {
-            return false;
+            return '';
         }
 
-        return true;
+        return $fileUrl;
     }
 }

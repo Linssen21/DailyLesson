@@ -22,7 +22,7 @@ abstract class FileUpload
 {
     abstract public function getScanner(): Scanner;
     abstract public function getFileStorage(): FileStorage;
-    abstract public function upload(UploadedFile $file, string $path): bool;
+    abstract public function upload(UploadedFile $file, string $path): string;
 
     /**
      * Fetching the download url

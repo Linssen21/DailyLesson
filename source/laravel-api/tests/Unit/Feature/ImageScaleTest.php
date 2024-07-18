@@ -10,6 +10,7 @@ use Tests\TestCase;
 class ImageScaleTest extends TestCase
 {
     private ImageScale $imageScale;
+    private string $scaledImageFilePath;
 
     protected function setUp(): void
     {
@@ -24,9 +25,20 @@ class ImageScaleTest extends TestCase
         $file = UploadedFile::fake()->image('test.jpg');
 
         // Act
-        $result = $this->imageScale->scale($file->getPathname(), 500);
+        $this->scaledImageFilePath = $this->imageScale->scale($file->getPathname(), 500);
 
         // When
-        $this->assertTrue(true);
+        $this->assertNotEmpty($this->scaledImageFilePath);
+        $this->assertFileExists($this->scaledImageFilePath);
+    }
+
+    protected function tearDown(): void
+    {
+        // Clean up: delete the scaled image file
+        if (isset($this->scaledImageFilePath) && file_exists($this->scaledImageFilePath)) {
+            unlink($this->scaledImageFilePath);
+        }
+
+        parent::tearDown();
     }
 }
