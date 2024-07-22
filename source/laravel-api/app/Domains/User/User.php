@@ -133,7 +133,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function password(): Attribute
     {
         return Attribute::make(
-            get: fn (string $strPassword) => $strPassword,
+            get: function (string|null $strPassword) {
+                if (empty($strPassword)) {
+                    return '';
+                }
+
+                return $strPassword;
+            },
             set: fn (string $strPassword) => bcrypt($strPassword)
         );
     }

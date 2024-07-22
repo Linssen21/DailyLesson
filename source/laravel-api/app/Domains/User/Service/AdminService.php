@@ -10,6 +10,7 @@ use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\UserMeta;
+use Carbon\Carbon;
 
 /**
  * Admin Domain Service
@@ -22,8 +23,8 @@ use App\Domains\User\UserMeta;
  */
 class AdminService
 {
-    private const ADMIN_KEY = 'capabilities';
-    private const ADMIN_VAL = 'administrator';
+    public const ADMIN_KEY = 'capabilities';
+    public const ADMIN_VAL = 'administrator';
     private string $adminToken;
 
     public function __construct(
@@ -113,7 +114,7 @@ class AdminService
             $user->tokens()->delete();
         }
 
-        return $user->createToken($this->adminToken)->plainTextToken;
+        return $user->createToken($this->adminToken, ['*'], Carbon::now()->addMinutes(60))->plainTextToken;
     }
 
 }

@@ -32,9 +32,6 @@ class AdminServiceTest extends TestCase
     private User $userMock;
     private UserMeta $userMetaMock;
 
-    private const ADMIN_KEY = 'capabilities';
-    private const ADMIN_VAL = 'administrator';
-
     // Runs before each test cases
     protected function setup(): void
     {
@@ -67,8 +64,8 @@ class AdminServiceTest extends TestCase
         $this->userMetaMock = new UserMeta();
         $this->userMetaMock->id = 1;
         $this->userMetaMock->user_id = $this->userMock->id;
-        $this->userMetaMock->meta_key = self::ADMIN_KEY;
-        $this->userMetaMock->meta_value = self::ADMIN_VAL;
+        $this->userMetaMock->meta_key = AdminService::ADMIN_KEY;
+        $this->userMetaMock->meta_value = AdminService::ADMIN_VAL;
         $this->userMetaMock->deleted = 0;
 
         $this->userMock->user_meta = collect([$this->userMetaMock]);
@@ -95,8 +92,8 @@ class AdminServiceTest extends TestCase
         ->withArgs(function ($arg) {
             return $arg instanceof UserMetaCreateDTO &&
             $arg->getUserId() === $this->userMock->id &&
-            $arg->getMetaKey() ===  self::ADMIN_KEY &&
-            $arg->getMetaValue() === self::ADMIN_VAL;
+            $arg->getMetaKey() ===  AdminService::ADMIN_KEY &&
+            $arg->getMetaValue() === AdminService::ADMIN_VAL;
         })
         ->andReturn($this->userMetaMock);
 
@@ -105,8 +102,8 @@ class AdminServiceTest extends TestCase
 
         // When
         $this->assertInstanceOf(UserMeta::class, $userMeta);
-        $this->assertEquals(self::ADMIN_KEY, $userMeta->meta_key);
-        $this->assertEquals(self::ADMIN_VAL, $userMeta->meta_value);
+        $this->assertEquals(AdminService::ADMIN_KEY, $userMeta->meta_key);
+        $this->assertEquals(AdminService::ADMIN_VAL, $userMeta->meta_value);
     }
 
     public function test_is_admin(): void
@@ -114,8 +111,8 @@ class AdminServiceTest extends TestCase
         // Arrange
         $id = $this->userMock->id;
         $aryCol = [
-            'meta_key' => self::ADMIN_KEY,
-            'meta_value' => self::ADMIN_VAL,
+            'meta_key' => AdminService::ADMIN_KEY,
+            'meta_value' => AdminService::ADMIN_VAL,
             'deleted' => 0
         ];
 
@@ -135,8 +132,8 @@ class AdminServiceTest extends TestCase
         $id = $this->userMock->id;
         $this->userMetaMock->meta_key = 'USER_KEY';
         $aryCol = [
-            'meta_key' => self::ADMIN_KEY,
-            'meta_value' => self::ADMIN_VAL,
+            'meta_key' => AdminService::ADMIN_KEY,
+            'meta_value' => AdminService::ADMIN_VAL,
             'deleted' => 0
         ];
 

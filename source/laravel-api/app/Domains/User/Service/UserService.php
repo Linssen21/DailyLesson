@@ -47,7 +47,11 @@ class UserService
     public function authentication(UserAuthDTO $userAuthDTO): string
     {
         $user = $this->userRepository->getByColumn(['email' => $userAuthDTO->getEmail()]);
-        if (!$user || !Hash::check($userAuthDTO->getPassword(), $user->password)) {
+        if (empty($user->password)) {
+            return '';
+        }
+
+        if (!Hash::check($userAuthDTO->getPassword(), $user->password)) {
             return '';
         }
 
@@ -59,7 +63,7 @@ class UserService
             $user->tokens()->delete();
         }
 
-        return $user->createToken($this->apiToken)->plainTextToken;
+        return $user->createToken($this->apiToken, ['*'], Carbon::now()->addMinutes(60))->plainTextToken;
     }
 
     /**
