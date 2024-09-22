@@ -11,15 +11,36 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $aryUserRepository = [
+        $this->bindUser();
+        $this->bindPost();
+    }
+
+    private function bindUser(): void
+    {
+        $repository = [
             'UserRepository',
-            'UserMetaRepository'
+            'UserMetaRepository',
+        ];
+        $this->bindRepository($repository, "User");
+    }
+
+    private function bindPost(): void
+    {
+        $repository = [
+            'PostMetaRepository',
+            'PostRepository',
+            'SlideRepository'
         ];
 
-        foreach ($aryUserRepository as $strUserRepository) {
-            $strInterface = "App\Domains\User\Contracts\\{$strUserRepository}";
-            $strImpl = "App\Repositories\Mysql\User\\{$strUserRepository}";
-            $this->app->bind($strInterface, $strImpl);
+        $this->bindRepository($repository, "Post");
+    }
+
+    private function bindRepository(array $repository, string $domain): void
+    {
+        foreach ($repository as $repo) {
+            $bindInterface = "App\Domains\\$domain\\Contracts\\$repo";
+            $bindImpl = "App\Repositories\Mysql\\$domain\\$repo";
+            $this->app->bind($bindInterface, $bindImpl);
         }
     }
 

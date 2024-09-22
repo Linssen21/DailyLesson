@@ -11,6 +11,7 @@ use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\UserMeta;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Admin Domain Service
@@ -100,6 +101,10 @@ class AdminService
     public function authentication(UserAuthDTO $userAuthDTO): string
     {
         $user = $this->userRepository->getByColumn(['email' => $userAuthDTO->getEmail()]);
+
+        if (!Hash::check($userAuthDTO->getPassword(), $user->password)) {
+            return '';
+        }
 
         $userMeta = $user->user_meta->first();
         if (!($userMeta instanceof UserMeta)) {

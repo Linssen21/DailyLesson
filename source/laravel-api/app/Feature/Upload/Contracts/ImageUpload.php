@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Feature\Upload\Contracts;
 
+use App\Feature\Upload\Dimension;
+
 /**
  * [ImageUpload] Factory for File Storage and Scanner
  *
@@ -16,5 +18,6 @@ namespace App\Feature\Upload\Contracts;
 
 interface ImageUpload
 {
-    public function getScaler(): Scaler;
+    public function getScaler(int $maxWidth): Scaler;
+    public function getImageDimension(string $path): Dimension;
 }

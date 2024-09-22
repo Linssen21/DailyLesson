@@ -35,7 +35,7 @@ class PosTest extends TestCase
         // Act
         $this->post->excerpt = '';
 
-        // When
+        // Assert
         $this->assertEquals($content, $this->post->excerpt);
 
     }
@@ -51,7 +51,7 @@ class PosTest extends TestCase
         // Act
         $this->post->excerpt = '';
 
-        // When
+        // Assert
         $this->assertEquals($expected_excerpt, $this->post->excerpt);
 
     }
@@ -66,7 +66,7 @@ class PosTest extends TestCase
         // Act
         $this->post->excerpt = $expected_excerpt;
 
-        // When
+        // Assert
         $this->assertEquals($expected_excerpt, $this->post->excerpt);
 
     }
@@ -81,7 +81,7 @@ class PosTest extends TestCase
         // Act
         $this->post->slug = '';
 
-        // When
+        // Assert
         $this->assertEquals($expected_slug, $this->post->slug);
 
     }
@@ -96,7 +96,7 @@ class PosTest extends TestCase
         // Act
         $this->post->slug = 'this-is-a-sample-slug';
 
-        // When
+        // Assert
         $this->assertEquals($expected_slug, $this->post->slug);
 
     }
@@ -109,7 +109,7 @@ class PosTest extends TestCase
         // Act
         $this->post->incrementLikeCount(5);
 
-        // when
+        // Assert
         $this->assertEquals(10, $this->post->like_count);
     }
 
@@ -122,7 +122,7 @@ class PosTest extends TestCase
         // Act
         $this->post->decrementLikeCount(3);
 
-        // when
+        // Assert
         $this->assertEquals(2, $this->post->like_count);
     }
 
@@ -135,7 +135,7 @@ class PosTest extends TestCase
         // Act
         $result = $this->post->isDeleted();
 
-        // when
+        // Assert
         $this->assertTrue($result);
         $this->assertEquals($this->post->status, new PostStatus(3));
     }

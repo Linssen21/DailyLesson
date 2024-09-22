@@ -8,6 +8,7 @@ use App\Feature\Upload\Contracts\FileStorage;
 use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 
 /**
  * [Concrete File Storage] Local Storage
@@ -37,17 +38,28 @@ class LocalStorage implements FileStorage
     public function upload(UploadedFile|string $file, string $path = '', string $name = ''): string
     {
         $fileName = $file instanceof UploadedFile ? $file->getClientOriginalName() : $name;
+        $originalFileName = pathinfo($fileName, PATHINFO_FILENAME);
+        $extension = $file instanceof UploadedFile ? $file->getClientOriginalExtension() : pathinfo($fileName, PATHINFO_EXTENSION);
 
-        if ($this->storage->exists("$path/$fileName")) {
+        // Set file name
+        $counter = 1;
+        $uniqueFileName = $fileName;
+        while($this->storage->exists("$path/$uniqueFileName")) {
+            $uniqueFileName = "{$originalFileName}_{$counter}.{$extension}";
+            $counter++;
+        }
+
+        // Save file to storage
+        $filePath = $this->storage->putFileAs($path, $file, $uniqueFileName);
+        if (!$filePath) {
+            Log::channel('applog')->info(
+                '[Upload] Save File error',
+                ['data' => "Filename: $path/$uniqueFileName"]
+            );
             return '';
         }
 
-        $fileUrl = $this->storage->putFileAs($path, $file, $fileName);
-        if (!$fileUrl) {
-            return '';
-        }
-
-        return $fileUrl;
+        return $filePath;
     }
 
     /**
@@ -65,5 +77,16 @@ class LocalStorage implements FileStorage
         }
 
         return rtrim(config('app.url'), '/') . '/' . $path;
+    }
+
+    /**
+     * Get the file content
+     *
+     * @param string $path
+     * @return string
+     */
+    public function get(string $path): string
+    {
+        return $this->storage->get($path);
     }
 }

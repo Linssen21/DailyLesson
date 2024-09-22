@@ -6,23 +6,32 @@ namespace App\Domains\Post\Slides;
 
 use App\Domains\Post\Contracts\PostMeta;
 
+/**
+ * Template Value Object(VO)
+ *
+ * @ticket Feature/DL-4
+ *
+ * @package Daily Lesson project
+ * @author Sen <vmtesterv@gmail.com>
+ * @version 1.0.0
+ */
 class Template implements PostMeta
 {
     public const META_KEY = 'slide_template';
     public const GOOGLE_SLIDE_URL_REGEX = '/^https?:\/\/(?:www\.)?docs\.google\.com\/presentation\/d\/[a-zA-Z0-9_-]+\/?.*$/';
     public const CANVA_URL_REGEX = '/^https?:\/\/(?:www\.)?canva\.com\/design\/[a-zA-Z0-9_-]+\/?.*$/';
 
-    private string $pptUrl;
+    private string $pptPath;
     private string $googleSlideUrl;
     private string $canvaUrl;
 
     public function __construct(
-        string $pptUrl = '',
+        string $pptPath = '',
         string $googleSlideUrl = '',
         string $canvaUrl = ''
     ) {
 
-        $this->pptUrl = $pptUrl;
+        $this->pptPath = $pptPath;
         $this->googleSlideUrl = $googleSlideUrl;
         $this->canvaUrl = $canvaUrl;
 
@@ -32,7 +41,6 @@ class Template implements PostMeta
     private function validateInitialUrl(): void
     {
         $aryUrls = [
-            'Powerpoint' => $this->pptUrl,
             'Google Slide' => $this->googleSlideUrl,
             'Canva' => $this->canvaUrl
         ];
@@ -74,7 +82,7 @@ class Template implements PostMeta
 
     public function getPpt(): string
     {
-        return $this->pptUrl;
+        return $this->pptPath;
     }
 
     public function getGoogleSlide(): string
@@ -96,7 +104,7 @@ class Template implements PostMeta
     {
         return json_encode(
             [
-                'pptUrl' => $this->pptUrl,
+                'pptPath' => $this->pptPath,
                 'googleSlideUrl' => $this->googleSlideUrl,
                 'canvaUrl' => $this->canvaUrl,
             ]
@@ -108,7 +116,7 @@ class Template implements PostMeta
         return [
             'meta_key' => self::META_KEY,
             'meta_value' => [
-                'pptUrl' => $this->pptUrl,
+                'pptPath' => $this->pptPath,
                 'googleSlideUrl' => $this->googleSlideUrl,
                 'canvaUrl' => $this->canvaUrl,
             ]
@@ -117,7 +125,7 @@ class Template implements PostMeta
 
     public function equals(self $other): bool
     {
-        return $this->pptUrl === $other->pptUrl
+        return $this->pptPath === $other->pptPath
             && $this->googleSlideUrl === $other->googleSlideUrl
             && $this->canvaUrl === $other->canvaUrl;
     }
@@ -131,10 +139,17 @@ class Template implements PostMeta
     {
         $data = json_decode($json, true);
         return new self(
-            $data['meta_value']['pptUrl'],
+            $data['meta_value']['pptPath'],
             $data['meta_value']['googleSlideUrl'],
             $data['meta_value']['canvaUrl']
         );
+    }
+
+    public function isEmpty(): bool
+    {
+        return empty($this->pptPath)
+            && empty($this->canvaUrl)
+            && empty($this->googleSlideUrl);
     }
 
 }

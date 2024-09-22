@@ -17,6 +17,7 @@
 ## Generating ide helper's
 
 - php artisan ide-helper:generate
+- php artisan ide-helper:models
 
 ## Create a controller
 
@@ -39,6 +40,10 @@
 ## Running migration in testing database
 
 - php artisan migrate --database=mysql_testing --env=testing
+
+## Creating factory
+
+- php artisan make:factory PostFactory
 
 ## Creating an event
 

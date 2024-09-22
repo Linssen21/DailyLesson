@@ -10,10 +10,9 @@ interface Scaler
      * Scale the image and return the output file
      *
      * @param string $fileName
-     * @param integer $maxWidth
      * @return string
      */
-    public function scale(string $fileName, int $maxWidth): string;
+    public function scale(string $fileName): string;
 
 
     /**

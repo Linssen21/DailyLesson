@@ -24,12 +24,11 @@ class ImageUploadTest extends TestCase
     {
         // Arrange
         $file = UploadedFile::fake()->image('test_image_upload.jpg');
-        chmod($file->getPathname(), 0644);
 
         // Act
         $result = $this->imageUpload->upload($file, 'uploads');
 
-        // When
+        // Assert
         $this->assertNotEmpty($result);
         Storage::disk('local')->assertExists($result);
         $this->assertEquals('uploads/test_image_upload.jpg', $result);

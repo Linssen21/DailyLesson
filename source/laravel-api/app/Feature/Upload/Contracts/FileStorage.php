@@ -24,4 +24,7 @@ interface FileStorage
      * @return string
      */
     public function downloadUrl(string $path): string;
+
+
+    public function get(string $path): string;
 }

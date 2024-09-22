@@ -9,7 +9,7 @@ use App\Domains\User\Service\AdminService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Create admin command
@@ -92,9 +92,9 @@ class CreateAdmin extends Command
     private function validateOptions(): bool
     {
         $validator = Validator::make($this->options(), [
-            'name' => 'required|string|unique:users,name',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'name' => ['required','string','unique:users,name'],
+            'email' => ['required','email','unique:users,email'],
+            'password' => ['required','string','min:6'],
         ]);
 
         if ($validator->fails()) {

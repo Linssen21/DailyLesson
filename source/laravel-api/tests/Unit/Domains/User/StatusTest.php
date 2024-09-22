@@ -22,7 +22,7 @@ class StatusTest extends TestCase
         // Act
         $intFetchedStatus = $status->getStatus();
 
-        // When
+        // Assert
         $this->assertEquals($intCurrentStatus, $intFetchedStatus);
     }
 
@@ -83,7 +83,7 @@ class StatusTest extends TestCase
         // Act
         $blnStatusDeleted = $status->isDeleted();
 
-        // When
+        // Assert
         $this->assertTrue($blnStatusDeleted);
     }
 }

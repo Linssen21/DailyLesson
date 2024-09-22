@@ -61,7 +61,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @param array $aryColumn
      * @param mixed $mixOperator
-     * @return Collection
+     * @return User
      */
     public function getByColumn(array $aryColumn, mixed $mixOperator = "="): ?User
     {

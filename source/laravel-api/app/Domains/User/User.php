@@ -9,6 +9,7 @@ use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\ValueObjects\Status as StatusValueObject;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -292,5 +293,34 @@ class User extends Authenticatable implements MustVerifyEmail
         event(new Registered($user));
         return $user;
     }
+
+    /**
+     * Scope a query to only include active users.
+     * usage: User::active()->get()
+     *
+     * @ticket Feature/DL-4
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', StatusValueObject::ACTIVE);
+    }
+
+    /**
+     * Scope a query to only include deleted users.
+     * usage: User::deletedUser()->get()
+     *
+     * @ticket Feature/DL-4
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeDeletedUser(Builder $query): void
+    {
+        $query->where('status', StatusValueObject::DELETED);
+    }
+
 
 }

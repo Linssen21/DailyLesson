@@ -7,7 +7,7 @@ use Exception;
 class ScannerException extends Exception
 {
     public function __construct(
-        string $message = 'A Virus is Detected',
+        string $message = 'An unexpected error occurred while scanning your file',
         int $code = 0,
         Exception $previous = null
     ) {

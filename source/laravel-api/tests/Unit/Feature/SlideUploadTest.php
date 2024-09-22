@@ -15,6 +15,7 @@ class SlideUploadTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Storage::fake('local');
         $this->slideUpload = new SlideUpload();
     }
 
@@ -27,7 +28,7 @@ class SlideUploadTest extends TestCase
         // Act
         $result = $this->slideUpload->upload($file, 'uploads');
 
-        // When
+        // Assert
         $this->assertNotEmpty($result);
         Storage::disk('local')->assertExists($result);
         $this->assertEquals('uploads/slides.ppt', $result);

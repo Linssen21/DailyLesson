@@ -27,14 +27,14 @@ class LocalStorageTest extends TestCase
         // Act
         $path = $this->localStorage->upload($file, 'uploads');
 
-        // When
+        // Assert
         Storage::disk('local')->assertExists($path);
         $this->assertNotEmpty($path);
         $this->assertEquals('uploads/test.ppt', $path);
     }
 
 
-    public function test_upload_fail(): void
+    public function test_upload_duplicate(): void
     {
         // Arrange
         $file = UploadedFile::fake()->create('test.ppt', 1000);
@@ -44,8 +44,8 @@ class LocalStorageTest extends TestCase
         // Act
         $path = $this->localStorage->upload($duplicateFile, 'uploads');
 
-        // When
-        $this->assertEmpty($path);
+        // Assert
+        $this->assertEquals("uploads/test_1.ppt", $path);
     }
 
 
@@ -58,7 +58,7 @@ class LocalStorageTest extends TestCase
         // Act
         $downloadUrl = $this->localStorage->downloadUrl($path);
 
-        // When
+        // Assert
         $this->assertNotEmpty($downloadUrl);
 
     }
@@ -71,7 +71,7 @@ class LocalStorageTest extends TestCase
         // Act
         $downloadUrl = $this->localStorage->downloadUrl($path);
 
-        // When
+        // Assert
         $this->assertEmpty($downloadUrl);
     }
 }

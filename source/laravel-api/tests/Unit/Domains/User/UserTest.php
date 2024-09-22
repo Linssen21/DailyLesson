@@ -68,7 +68,7 @@ class UserTest extends TestCase
         // Act
         $this->user->changePassword($strPassword);
 
-        // When
+        // Assert
         $this->assertTrue(Hash::check($strPassword, $this->user->password));
     }
 
@@ -88,7 +88,7 @@ class UserTest extends TestCase
         // Act
         $blnStatus = $this->user->isActive();
 
-        // When
+        // Assert
         $this->assertTrue($blnStatus);
     }
 
@@ -100,7 +100,7 @@ class UserTest extends TestCase
         // Act
         $this->user->markAsVerified();
 
-        // When
+        // Assert
         $this->assertNotNull($this->user->email_verified_at);
         $this->assertEquals(new Status(Status::ACTIVE), $this->user->status);
         $this->assertEquals($dtNow->toDateString(), $this->user->email_verified_at->toDateString());
@@ -114,7 +114,7 @@ class UserTest extends TestCase
         // Act
         $blnIsVerified = $this->user->isVerified();
 
-        // When
+        // Assert
         $this->assertTrue($blnIsVerified);
     }
 
@@ -126,7 +126,7 @@ class UserTest extends TestCase
         // Act
         $blnIsDeleted = $this->user->isDeleted();
 
-        // When
+        // Assert
         $this->assertTrue($blnIsDeleted);
     }
 

@@ -16,7 +16,7 @@ class ImageScaleTest extends TestCase
     {
         parent::setUp();
         Storage::fake('local');
-        $this->imageScale = new ImageScale();
+        $this->imageScale = new ImageScale(500);
     }
 
     public function test_scale(): void
@@ -27,7 +27,7 @@ class ImageScaleTest extends TestCase
         // Act
         $this->scaledImageFilePath = $this->imageScale->scale($file->getPathname(), 500);
 
-        // When
+        // Assert
         $this->assertNotEmpty($this->scaledImageFilePath);
         $this->assertFileExists($this->scaledImageFilePath);
     }

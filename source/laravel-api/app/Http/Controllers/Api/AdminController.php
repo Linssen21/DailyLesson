@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Common\Controller;
 use App\Http\Requests\Api\AuthRequest;
 use App\Services\AdminService;
 use Illuminate\Http\JsonResponse;
@@ -27,20 +27,6 @@ class AdminController extends Controller
     public function login(AuthRequest $request): JsonResponse
     {
         $aryAuthRes = $this->adminService->authentication($request->toDto());
-        return $this->authResponse($aryAuthRes);
-    }
-
-    /**
-     * Authentication response utility function for login and registration
-     *
-     * @ticket Feature/DL-2
-     *
-     * @param array $aryData
-     * @return JsonResponse
-     */
-    private function authResponse(array $aryData): JsonResponse
-    {
-        $intStatus = $aryData['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json($aryData, $intStatus);
+        return $this->response($aryAuthRes);
     }
 }

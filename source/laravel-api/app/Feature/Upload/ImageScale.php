@@ -7,6 +7,10 @@ use GdImage;
 
 class ImageScale implements Scaler
 {
+    public function __construct(private int $maxWidth)
+    {
+    }
+
     /**
      * Scale the image and store in the temporary file path (/tmp)
      *
@@ -14,14 +18,14 @@ class ImageScale implements Scaler
      * @param integer $maxWidth
      * @return string
      */
-    public function scale(string $fileName, int $maxWidth = 500): string
+    public function scale(string $fileName): string
     {
         $image = $this->createImage($fileName);
 
         // Create Scaled Image
         $width = imagesx($image);
         $height = imagesy($image);
-        $newWidth = min($width, $maxWidth);
+        $newWidth = min($width, $this->maxWidth);
         $newHeight = $height * ($newWidth / $width);
         $scaledImage = imagescale($image, $newWidth, $newHeight);
 

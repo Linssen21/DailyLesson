@@ -7,9 +7,13 @@ namespace App\Domains\Post\Common;
 use App\Domains\Post\Casts\Status;
 use App\Domains\Post\ValueObjects\PostStatus;
 use App\Domains\User\User;
+use Database\Factories\PostFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * Post Entity / Model
@@ -22,6 +26,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  */
 class Post extends Model
 {
+    use HasFactory;
+
+    protected $table = 'posts';
+
     protected int $excerpt_length = 100;
 
     /**
@@ -40,6 +48,23 @@ class Post extends Model
         'like_count',
         'published_at'
     ];
+
+    protected static function newFactory(): PostFactory
+    {
+        return PostFactory::new();
+    }
+
+    /**
+     * Setup relationship with PostMeta entity
+     *
+     * @ticket Feature/DL-4
+     *
+     * @return HasMany
+     */
+    public function post_meta(): HasMany
+    {
+        return $this->hasMany(PostMeta::class, 'post_id', 'id');
+    }
 
     /**
      * Setup relationship with User entity
@@ -164,15 +189,26 @@ class Post extends Model
                     $slugText = $strSlug;
                 }
 
-                $slugText = strtolower($slugText);
-                // Replace spaces and non-alphanumeric characters with hyphens
-                $slugText = preg_replace('/[^a-z0-9]+/i', '-', $slugText);
-                // Trim hyphens from the beginning and end
-                $slugText = trim($slugText, '-');
-
-                return $slugText;
+                return self::generateSlug($slugText);
             }
         );
+    }
+
+    /**
+     * Generate a slug from the given text.
+     *
+     * @param string $text
+     * @return string
+     */
+    public static function generateSlug(string $text): string
+    {
+        $text = strtolower($text);
+        // Replace spaces and non-alphanumeric characters with hyphens
+        $text = preg_replace('/[^a-z0-9]+/i', '-', $text);
+        // Trim hyphens from the beginning and end
+        $text = trim($text, '-');
+
+        return $text;
     }
 
     /**
@@ -265,6 +301,41 @@ class Post extends Model
     public function setExcerptLength(int $excerpt_length): int
     {
         return $this->excerpt_length = $excerpt_length;
+    }
+
+    /**
+     * Scope a query to only include published posts.
+     * usage: Post::publish()->get()
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopePublish(Builder $query): void
+    {
+        $query->where('status', PostStatus::PUBLISH);
+    }
+
+    /**
+     * Scope a query to only include deleted posts.
+     * usage: Post::deletedPost()->get()
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeDeletedPost(Builder $query): void
+    {
+        $query->where('status', PostStatus::DELETED);
+    }
+
+    /**
+     * Scope a query to only include active posts.
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', '!=', PostStatus::DELETED);
     }
 
 }

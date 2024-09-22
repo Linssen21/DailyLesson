@@ -7,11 +7,13 @@ namespace Tests\Feature\Api;
 use App\Domains\User\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Tests\Util;
 
 class UserTest extends TestCase
 {
     // Rollback database changes
     use RefreshDatabase;
+    private Util $util;
 
     protected function setUp(): void
     {
@@ -24,6 +26,7 @@ class UserTest extends TestCase
            'display_name' => 'testdisp',
            'email_verified_at' => now(),
         ]);
+        $this->util = new Util($this);
     }
 
     public function test_registration(): void
@@ -37,7 +40,7 @@ class UserTest extends TestCase
             'display_name' => 'testdisp1'
         ]);
 
-        // When
+        // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => config('constants.STATUS_SUCCESS'),
@@ -56,8 +59,8 @@ class UserTest extends TestCase
           'display_name' => 'testdisp'
         ]);
 
-        // When
-        $response->assertStatus(200)
+        // Assert
+        $response->assertStatus(422)
             ->assertJson([
                 'status' => false,
             ]);
@@ -71,7 +74,7 @@ class UserTest extends TestCase
             'password' => 'testpass',
         ]);
 
-        // When
+        // Assert
         $response->assertStatus(200)
             ->assertJson([
                 'status' => config('constants.STATUS_SUCCESS'),
@@ -86,7 +89,7 @@ class UserTest extends TestCase
             'password' => 'testpass_failed',
         ]);
 
-        // When
+        // Assert
         $response->assertStatus(500)
             ->assertJson([
                 'status' => config('constants.STATUS_FAILED'),
@@ -101,7 +104,7 @@ class UserTest extends TestCase
             'email' => 'test@test.com',
         ]);
 
-        // When
+        // Assert
         $response->assertStatus(200)
         ->assertJson([
             'status' => config('constants.STATUS_SUCCESS'),
@@ -110,12 +113,8 @@ class UserTest extends TestCase
 
     public function test_logout(): void
     {
-        $logResponse = $this->postJson('/api/v2/auth/login', [
-            'email' => 'test@test.com',
-            'password' => 'testpass',
-        ]);
 
-        $token = $logResponse->json('token');
+        $token = $this->util->authToken('test@test.com', 'testpass');
 
         // Logout request with bearer token
         $response = $this->withHeaders([

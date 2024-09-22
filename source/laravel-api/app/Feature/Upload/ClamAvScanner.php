@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Feature\Upload;
 
 use App\Feature\Upload\Contracts\Scanner;
-use Log;
+use Illuminate\Support\Facades\Log;
 use Socket\Raw\Factory as SocketFactoy;
 use Xenolope\Quahog\Client;
 
@@ -35,6 +35,7 @@ class ClamAvScanner implements Scanner
      */
     public function scan(string $fileName): bool
     {
+        chmod($fileName, 0644);
         $result = $this->client->scanFile($fileName);
 
         Log::channel('applog')->info(
