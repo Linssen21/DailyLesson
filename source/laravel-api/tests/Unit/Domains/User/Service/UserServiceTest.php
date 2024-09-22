@@ -113,7 +113,7 @@ class UserServiceTest extends TestCase
         // Act
         $token = $this->userService->authentication($userAuthDTO);
 
-        // When
+        // Assert
         $this->assertNotEmpty($token);
         $this->assertEquals(1, $this->userMock->tokens()->count());
     }
@@ -136,7 +136,7 @@ class UserServiceTest extends TestCase
         // Act
         $token = $this->userService->authentication($userAuthDTO);
 
-        // When
+        // Assert
         $this->assertEmpty($token);
     }
 
@@ -152,7 +152,7 @@ class UserServiceTest extends TestCase
 
         $createdUser = $this->userService->registration($userCreateDTO);
 
-        // When
+        // Assert
         $this->assertInstanceOf(User::class, $createdUser);
         $this->assertEquals($userCreateDTO->getEmail(), $createdUser->email);
         $this->assertEquals($userCreateDTO->getName(), $createdUser->name);
@@ -172,7 +172,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnToken = $this->userService->revokeToken($token);
 
-        // When
+        // Assert
         $this->assertTrue($blnToken);
     }
 
@@ -187,7 +187,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnToken = $this->userService->revokeToken($token);
 
-        // When
+        // Assert
         $this->assertFalse($blnToken);
     }
 
@@ -202,7 +202,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnVerify = $this->userService->verification($intId);
 
-        // When
+        // Assert
         $this->assertTrue($blnVerify);
     }
 
@@ -218,7 +218,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnVerify = $this->userService->verification($intId);
 
-        // When
+        // Assert
         $this->assertFalse($blnVerify);
     }
 
@@ -234,7 +234,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnVerify = $this->userService->sendVerification($email);
 
-        // When
+        // Assert
         $this->assertTrue($blnVerify);
     }
 
@@ -251,7 +251,7 @@ class UserServiceTest extends TestCase
         // Act
         $blnVerify = $this->userService->sendVerification($email);
 
-        // When
+        // Assert
         $this->assertFalse($blnVerify);
     }
 
@@ -293,7 +293,7 @@ class UserServiceTest extends TestCase
         // Act
         $token = $this->userService->registerWithSocial($provider, $this->socialUserMock);
 
-        // When
+        // Assert
         $this->assertNotEmpty($token);
         $this->assertEquals(1, $this->userMock->tokens()->count());
     }
@@ -336,7 +336,7 @@ class UserServiceTest extends TestCase
         // Act
         $token = $this->userService->registerWithSocial($provider, $this->socialUserMock);
 
-        // When
+        // Assert
         $this->assertNotEmpty($token);
         $this->assertEquals(1, $this->userMock->tokens()->count());
     }

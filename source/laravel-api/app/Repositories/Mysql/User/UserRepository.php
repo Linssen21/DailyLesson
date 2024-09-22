@@ -61,7 +61,7 @@ class UserRepository implements UserRepositoryInterface
      *
      * @param array $aryColumn
      * @param mixed $mixOperator
-     * @return Collection
+     * @return User
      */
     public function getByColumn(array $aryColumn, mixed $mixOperator = "="): ?User
     {
@@ -89,25 +89,6 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getByColumnWithUserMeta(int $userId, array $aryColumn, mixed $mixOperator = "="): User
     {
-        // $query = DB::table('users as u')
-        //     ->join('user_meta as um', 'u.id', '=', 'um.user_id')
-        //     ->select([
-        //         'u.*',
-        //         'um.id AS user_meta_id',
-        //         'um.user_id AS meta_user_id',
-        //         'um.meta_key',
-        //         'um.meta_value',
-        //         'um.deleted',
-        //         'um.created_at AS meta_created_at',
-        //         'um.updated_at AS meta_updated_at'
-        //     ])
-        //     ->where('u.id', $userId);
-
-        // foreach ($aryColumn as $column => $value) {
-        //     $query->where($column, $value);
-        // }
-
-        // return $query->first();
         $queryUser = $this->userModel
             ->with(['user_meta' => function ($query) use ($aryColumn) {
                 foreach ($aryColumn as $column => $value) {

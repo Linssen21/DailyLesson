@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Web;
 
-use App\Http\Controllers\Controller;
 use App\Http\Requests\Web\VerificationRequest;
 use App\Services\UserService;
 use Illuminate\Http\RedirectResponse;
@@ -19,7 +18,7 @@ use Illuminate\Http\RedirectResponse;
  * @author Sen <vmtesterv@gmail.com>
  * @version 1.0.0
  */
-class UserController extends Controller
+class UserController
 {
     public function __construct(private UserService $userService)
     {

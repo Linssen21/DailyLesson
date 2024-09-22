@@ -10,7 +10,7 @@ use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\Service\AdminService;
 use App\Domains\User\User;
 use App\Domains\User\UserMeta;
-use Hash;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -31,9 +31,6 @@ class AdminServiceTest extends TestCase
     private AdminService $adminService;
     private User $userMock;
     private UserMeta $userMetaMock;
-
-    private const ADMIN_KEY = 'capabilities';
-    private const ADMIN_VAL = 'administrator';
 
     // Runs before each test cases
     protected function setup(): void
@@ -67,8 +64,8 @@ class AdminServiceTest extends TestCase
         $this->userMetaMock = new UserMeta();
         $this->userMetaMock->id = 1;
         $this->userMetaMock->user_id = $this->userMock->id;
-        $this->userMetaMock->meta_key = self::ADMIN_KEY;
-        $this->userMetaMock->meta_value = self::ADMIN_VAL;
+        $this->userMetaMock->meta_key = AdminService::ADMIN_KEY;
+        $this->userMetaMock->meta_value = AdminService::ADMIN_VAL;
         $this->userMetaMock->deleted = 0;
 
         $this->userMock->user_meta = collect([$this->userMetaMock]);
@@ -95,18 +92,18 @@ class AdminServiceTest extends TestCase
         ->withArgs(function ($arg) {
             return $arg instanceof UserMetaCreateDTO &&
             $arg->getUserId() === $this->userMock->id &&
-            $arg->getMetaKey() ===  self::ADMIN_KEY &&
-            $arg->getMetaValue() === self::ADMIN_VAL;
+            $arg->getMetaKey() ===  AdminService::ADMIN_KEY &&
+            $arg->getMetaValue() === AdminService::ADMIN_VAL;
         })
         ->andReturn($this->userMetaMock);
 
         // Act
         $userMeta = $this->adminService->createAdmin($userCreateDTO);
 
-        // When
+        // Assert
         $this->assertInstanceOf(UserMeta::class, $userMeta);
-        $this->assertEquals(self::ADMIN_KEY, $userMeta->meta_key);
-        $this->assertEquals(self::ADMIN_VAL, $userMeta->meta_value);
+        $this->assertEquals(AdminService::ADMIN_KEY, $userMeta->meta_key);
+        $this->assertEquals(AdminService::ADMIN_VAL, $userMeta->meta_value);
     }
 
     public function test_is_admin(): void
@@ -114,8 +111,8 @@ class AdminServiceTest extends TestCase
         // Arrange
         $id = $this->userMock->id;
         $aryCol = [
-            'meta_key' => self::ADMIN_KEY,
-            'meta_value' => self::ADMIN_VAL,
+            'meta_key' => AdminService::ADMIN_KEY,
+            'meta_value' => AdminService::ADMIN_VAL,
             'deleted' => 0
         ];
 
@@ -125,7 +122,7 @@ class AdminServiceTest extends TestCase
 
         // Act
         $blnResult = $this->adminService->isAdmin($id);
-        // when
+        // Assert
         $this->assertTrue($blnResult);
     }
 
@@ -135,8 +132,8 @@ class AdminServiceTest extends TestCase
         $id = $this->userMock->id;
         $this->userMetaMock->meta_key = 'USER_KEY';
         $aryCol = [
-            'meta_key' => self::ADMIN_KEY,
-            'meta_value' => self::ADMIN_VAL,
+            'meta_key' => AdminService::ADMIN_KEY,
+            'meta_value' => AdminService::ADMIN_VAL,
             'deleted' => 0
         ];
 
@@ -146,7 +143,7 @@ class AdminServiceTest extends TestCase
 
         // Act
         $blnResult = $this->adminService->isAdmin($id);
-        // when
+        // Assert
         $this->assertFalse($blnResult);
 
     }
@@ -160,14 +157,42 @@ class AdminServiceTest extends TestCase
             ->once()
             ->andReturn($this->userMock);
 
+        Hash::shouldReceive('check')
+            ->with('password', $this->userMock->password)
+            ->once()
+            ->andReturn(true);
+
         $userAuthDTO = new UserAuthDTO($this->userMock->email, 'password');
 
         // Act
         $strResToken = $this->adminService->authentication($userAuthDTO);
 
-        // When
+        // Assert
         $this->assertNotEmpty($strResToken);
         $this->assertEquals(1, $this->userMock->tokens()->count());
+    }
+
+    public function test_admin_authentication_fail(): void
+    {
+        // Arrange
+        $this->userRepositoryMock->shouldReceive('getByColumn')
+            ->with(['email' => $this->userMock->email])
+            ->once()
+            ->andReturn($this->userMock);
+
+        Hash::shouldReceive('check')
+            ->with('wrong_password', $this->userMock->password)
+            ->once()
+            ->andReturn(false);
+
+        $userAuthDTO = new UserAuthDTO($this->userMock->email, 'wrong_password');
+
+        // Act
+        $strResToken = $this->adminService->authentication($userAuthDTO);
+
+        // Assert
+        $this->assertEmpty($strResToken);
+        $this->assertEquals(0, $this->userMock->tokens()->count());
     }
 
     public function test_admin_authentication_meta_fail(): void
@@ -184,7 +209,7 @@ class AdminServiceTest extends TestCase
         // Act
         $strResToken = $this->adminService->authentication($userAuthDTO);
 
-        // When
+        // Assert
         $this->assertEmpty($strResToken);
         $this->assertEquals(0, $this->userMock->tokens()->count());
     }

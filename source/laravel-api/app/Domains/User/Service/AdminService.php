@@ -10,6 +10,8 @@ use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\DTO\UserMetaCreateDTO;
 use App\Domains\User\UserMeta;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Hash;
 
 /**
  * Admin Domain Service
@@ -22,8 +24,8 @@ use App\Domains\User\UserMeta;
  */
 class AdminService
 {
-    private const ADMIN_KEY = 'capabilities';
-    private const ADMIN_VAL = 'administrator';
+    public const ADMIN_KEY = 'capabilities';
+    public const ADMIN_VAL = 'administrator';
     private string $adminToken;
 
     public function __construct(
@@ -100,6 +102,10 @@ class AdminService
     {
         $user = $this->userRepository->getByColumn(['email' => $userAuthDTO->getEmail()]);
 
+        if (!Hash::check($userAuthDTO->getPassword(), $user->password)) {
+            return '';
+        }
+
         $userMeta = $user->user_meta->first();
         if (!($userMeta instanceof UserMeta)) {
             return '';
@@ -113,7 +119,7 @@ class AdminService
             $user->tokens()->delete();
         }
 
-        return $user->createToken($this->adminToken)->plainTextToken;
+        return $user->createToken($this->adminToken, ['*'], Carbon::now()->addMinutes(60))->plainTextToken;
     }
 
 }

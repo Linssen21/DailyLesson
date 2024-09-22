@@ -27,7 +27,7 @@ class UserTest extends TestCase
         // Act
         $response = $this->get($verificationUrl);
 
-        // When
+        // Assert
         $redirectUrl = config('app.frontend_url').'?verified=1';
         $response->assertRedirect($redirectUrl);
     }
@@ -48,7 +48,7 @@ class UserTest extends TestCase
         // Act
         $response = $this->get($verificationUrl);
 
-        // When
+        // Assert
         $response->assertStatus(500);
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
+use App\Common\Controller;
 use App\Http\Requests\Api\AuthRequest;
 use App\Http\Requests\Api\RegisterRequest;
 use App\Services\UserService;
@@ -38,7 +38,7 @@ class UserController extends Controller
     public function login(AuthRequest $request): JsonResponse
     {
         $aryAuthRes = $this->userService->authentication($request->toDto());
-        return $this->authResponse($aryAuthRes);
+        return $this->response($aryAuthRes);
     }
 
     /**
@@ -52,30 +52,14 @@ class UserController extends Controller
     public function register(RegisterRequest $registerRequest): JsonResponse
     {
         $aryRegRes = $this->userService->registration($registerRequest->toDto());
-        $intStatus = $aryRegRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json($aryRegRes, $intStatus);
+        return $this->response($aryRegRes);
     }
 
     public function logout(Request $request): JsonResponse
     {
         $strToken = $request->bearerToken();
         $aryRes = $this->userService->revokeToken($strToken);
-        $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json($aryRes, $intStatus);
-    }
-
-    /**
-     * Authentication response utility function for login and registration
-     *
-     * @ticket Feature/DL-2
-     *
-     * @param array $aryData
-     * @return JsonResponse
-     */
-    private function authResponse(array $aryData): JsonResponse
-    {
-        $intStatus = $aryData['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json($aryData, $intStatus);
+        return $this->response($aryRes);
     }
 
     /**
@@ -91,8 +75,7 @@ class UserController extends Controller
         $email = $request->input('email');
         $aryRes = $this->userService->sendVerification($email);
 
-        $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
-        return response()->json($aryRes, $intStatus);
+        return $this->response($aryRes);
     }
 
     /**
@@ -126,8 +109,7 @@ class UserController extends Controller
         $provider = $request->route('provider');
         $aryRes = $this->userService->handleProviderCallback($provider);
 
-        $intStatus = $aryRes['status'] == config('constants.STATUS_SUCCESS') ? 200 : 400;
-        return response()->json($aryRes, $intStatus);
+        return $this->response($aryRes);
     }
 
 }

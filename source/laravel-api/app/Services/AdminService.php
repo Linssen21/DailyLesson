@@ -4,12 +4,13 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Common\Service;
 use App\Domains\User\DTO\UserAuthDTO;
 use App\Domains\User\Service\AdminService as AdminDomainService;
 use Illuminate\Support\Facades\DB;
-use Log;
+use Illuminate\Support\Facades\Log;
 
-class AdminService
+class AdminService extends Service
 {
     public function __construct(private AdminDomainService $adminService)
     {
@@ -21,29 +22,17 @@ class AdminService
             DB::beginTransaction();
             $strToken = $this->adminService->authentication($userAuthDTO);
             if (empty($strToken)) {
-                return [
-                    'token' => '',
-                    'message' => 'Authentication failed, please check your username and password',
-                    'status' => config('constants.STATUS_FAILED')
-                ];
+                return $this->tokenResponse('', 'Authentication failed, please check your username and password', false);
             }
             DB::commit();
-            return [
-                'token' => $strToken,
-                'message' => 'Authentication successful',
-                'status' => config('constants.STATUS_SUCCESS')
-            ];
+            return $this->tokenResponse($strToken, 'Authentication successful', true);
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::channel('applog')->error(
                 '[Authentication] An error occurred during authentication',
                 ['data' => json_encode($userAuthDTO), 'message: ' => $th->getMessage()]
             );
-            return [
-                'token' => '',
-                'message' => 'Authentication failed',
-                'status' => config('constants.STATUS_FAILED')
-            ];
+            return $this->tokenResponse('', 'Authentication failed', false);
         }
     }
 }

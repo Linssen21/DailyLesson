@@ -9,6 +9,7 @@ use App\Domains\User\DTO\UserCreateDTO;
 use App\Domains\User\ValueObjects\Status as StatusValueObject;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,8 +17,8 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
+use RuntimeException;
 
 /**
  * User Entity / Model
@@ -133,7 +134,13 @@ class User extends Authenticatable implements MustVerifyEmail
     protected function password(): Attribute
     {
         return Attribute::make(
-            get: fn (string $strPassword) => $strPassword,
+            get: function (string|null $strPassword) {
+                if (empty($strPassword)) {
+                    return '';
+                }
+
+                return $strPassword;
+            },
             set: fn (string $strPassword) => bcrypt($strPassword)
         );
     }
@@ -177,8 +184,9 @@ class User extends Authenticatable implements MustVerifyEmail
      * @ticket Feature/DL-2
      *
      * @return void
+     * @throws RuntimeException
      */
-    public function changePassword(string $strCurrentPass, string $strPlainTextPass)
+    public function changePassword(string $strPlainTextPass)
     {
         // Since we are saving using this an existed user need's to be selected first before changing password
         if (!$this->exists) {
@@ -255,7 +263,7 @@ class User extends Authenticatable implements MustVerifyEmail
      */
     public function softDelete(): void
     {
-        $this->status = new StatusValueObject(StatusValueObject::DELETED);
+        $this->status = new StatusValueObject(3);
         $this->save();
     }
 
@@ -285,5 +293,34 @@ class User extends Authenticatable implements MustVerifyEmail
         event(new Registered($user));
         return $user;
     }
+
+    /**
+     * Scope a query to only include active users.
+     * usage: User::active()->get()
+     *
+     * @ticket Feature/DL-4
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('status', StatusValueObject::ACTIVE);
+    }
+
+    /**
+     * Scope a query to only include deleted users.
+     * usage: User::deletedUser()->get()
+     *
+     * @ticket Feature/DL-4
+     *
+     * @param Builder $query
+     * @return void
+     */
+    public function scopeDeletedUser(Builder $query): void
+    {
+        $query->where('status', StatusValueObject::DELETED);
+    }
+
 
 }
