@@ -60,6 +60,7 @@ services:
     ports:
       - "81:80"
       - "443:443"
+      - "3003:3003"
     volumes:
       - ./source/laravel-api:/var/www
       - ./config/nginxserver/conf.d/:/etc/nginx/conf.d/
@@ -110,5 +111,19 @@ services:
       - local-dev-network
     volumes:
       - shared_data:/tmp
+
+  client:
+    build:
+      context: .
+      dockerfile: config/Docker/Dockerfile.client
+    container_name: client
+    depends_on:
+      - laravel-api
+    volumes:
+      - ./source/client/src:/client/src
+      - ./source/client/package.json:/client/package.json
+    networks:
+      - local-dev-network
+
 volumes:
   shared_data:
