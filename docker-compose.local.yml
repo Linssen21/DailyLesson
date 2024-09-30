@@ -67,6 +67,7 @@ services:
     depends_on:
       - laravel-api
       - mysql
+      - client
     networks:
       - local-dev-network
 
@@ -121,6 +122,7 @@ services:
       - laravel-api
     volumes:
       - ./source/client/src:/client/src
+      - ./source/client/public:/client/public
       - ./source/client/package.json:/client/package.json
     networks:
       - local-dev-network
