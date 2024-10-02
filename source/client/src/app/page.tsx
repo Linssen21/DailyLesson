@@ -1,9 +1,15 @@
-import Image from "next/image";
+import React from "react";
+import Header from "./_components/header";
 
 export default function Home() {
   return (
-    <div>
-      <Image src="/assets/logo.png" alt="Site Logo" width={100} height={100} />
-    </div>
+    <>
+      <Header />
+      <div id="home-hero">
+        <div id="hero-content">
+          <h1></h1>
+        </div>
+      </div>
+    </>
   );
 }
