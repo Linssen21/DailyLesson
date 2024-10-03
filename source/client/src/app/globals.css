@@ -5,6 +5,7 @@
 :root {
   --primary-color: #008dda;
   --secondary-color:#bce0f7;
+  --search-background: rgb(247 247 247/1);
 }
 
 /* @media (prefers-color-scheme: dark) {
@@ -96,5 +97,13 @@ body {
   }
   body {
     @apply bg-background text-foreground;
+  }
+
+  h1 {
+    @apply text-h1-sm sm:text-h1-md md:text-h1-lg lg:text-h1-xl font-semibold;
+  }
+
+  h2 {
+    @apply text-h2-sm sm:text-h2-md md:text-h2-lg lg:text-h2-xl;
   }
 }

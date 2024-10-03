@@ -9,10 +9,24 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontSize: {
+        "h1-sm": ["32px", { lineHeight: "1.2" }], // Font size for smaller screens
+        "h1-md": ["40px", { lineHeight: "1.2" }], // For medium screens
+        "h1-lg": ["48px", { lineHeight: "1.2" }], // For large screens
+        "h1-xl": ["56px", { lineHeight: "1.2" }], // For extra large screens
+
+        // Custom h2 font sizes
+        "h2-sm": ["24px", { lineHeight: "1.2" }], // Font size for smaller screens
+        "h2-md": ["28px", { lineHeight: "1.2" }], // For medium screens
+        "h2-lg": ["32px", { lineHeight: "1.2" }], // For large screens
+        "h2-xl": ["36px", { lineHeight: "1.2" }], // For extra large screens
+      },
       colors: {
         background: "hsl(var(--background))",
+        searchBackground: "var(--search-background)",
         foreground: "hsl(var(--foreground))",
         default: "var(--primary-color)",
+        sectionBackground: "var(--secondary-color)",
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
           foreground: "hsl(var(--secondary-foreground))",
