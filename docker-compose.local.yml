@@ -126,6 +126,7 @@ services:
       - ./source/client/tailwind.config.ts:/client/tailwind.config.ts
       - ./source/client/package.json:/client/package.json
       - ./source/client/components.json:/client/components.json
+      - ./source/client/next.config.mjs:/client/next.config.mjs
     networks:
       - local-dev-network
 
