@@ -104,6 +104,10 @@ body {
   }
 
   h2 {
-    @apply text-h2-sm sm:text-h2-md md:text-h2-lg lg:text-h2-xl;
+    @apply text-h2-sm sm:text-h2-md md:text-h2-lg lg:text-h2-xl pb-[15px];
+  }
+
+  h4 {
+    @apply pt-[15px] font-medium;
   }
 }

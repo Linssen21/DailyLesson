@@ -71,6 +71,9 @@ const config: Config = {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
+      boxShadow: {
+        default: "0px 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      },
     },
   },
   plugins: [require("tailwindcss-animate")],
