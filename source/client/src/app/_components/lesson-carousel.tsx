@@ -31,7 +31,7 @@ export default function LessonCarousel() {
                   height={300}
                   className="rounded-lg shadow"
                 />
-                <h4>General Mathematics</h4>
+                <h4 className="pt-[15px]">General Mathematics</h4>
                 <h5 className="text-primary">Math</h5>
               </CardContent>
             </Card>

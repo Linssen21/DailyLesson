@@ -2,6 +2,9 @@ import React from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import LessonCarousel from "./_components/lesson-carousel";
+import { Card, CardContent } from "@/components/ui/card";
+import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
@@ -31,11 +34,80 @@ export default function Home() {
             </form>
           </div>
         </div>
-        <div id="home-page-sections" className="max-w-[1280px] mx-auto px-5">
-          <div id="featured-section" className="md:py-16 py-8">
+        <div id="home-page-sections" className="max-w-8xl mx-auto px-5">
+          <div id="featured-section" className="md:pt-16 pt-8 md:pb-8 pb-4">
             <h2 className="font-semibold">Featured</h2>
             <div id="featured-slide">
               <LessonCarousel />
+            </div>
+          </div>
+          <div
+            id="recent-lesson-section"
+            className="md:pt-16 pt-8 md:pb-8 pb-4"
+          >
+            <h2 className="font-semibold">Recent Lesson Slideshow</h2>
+            <div
+              id="recent-lesson-card"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            >
+              {Array.from({ length: 6 }).map((_, index) => (
+                <Card key={index} className="border">
+                  <CardContent className="p-0">
+                    <Image
+                      src="https://placehold.co/500x300.jpg"
+                      alt="Slider Image"
+                      width={400}
+                      height={300}
+                      className="w-full"
+                    />
+                  </CardContent>
+                  <div id="card-footer" className="p-5">
+                    <div className="grid grid-cols-2 w-full">
+                      <div id="recent-headers">
+                        <h4>General Mathematics</h4>
+                        <h5 className="text-primary">Math</h5>
+                      </div>
+                      <div id="slide-logos">
+                        <div className="flex gap-2 justify-end">
+                          <Link href="https://www.canva.com" target="_blank">
+                            <Image
+                              src="/assets/canva.svg"
+                              alt="Canva Icon"
+                              width={32}
+                              height={32}
+                              className="w-8 h-8"
+                            />
+                          </Link>
+                          <Link
+                            href="https://www.google.com/slides/about/"
+                            target="_blank"
+                          >
+                            <Image
+                              src="/assets/google-slide.svg"
+                              alt="Google Slide Icon"
+                              width={32}
+                              height={32}
+                              className="w-8 h-8"
+                            />
+                          </Link>
+                          <Link
+                            href="https://www.microsoft.com/en-us/microsoft-365/powerpoint"
+                            target="_blank"
+                          >
+                            <Image
+                              src="/assets/ppt.svg"
+                              alt="PPT Icon"
+                              width={32}
+                              height={32}
+                              className="w-8 h-8"
+                            />
+                          </Link>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
             </div>
           </div>
         </div>

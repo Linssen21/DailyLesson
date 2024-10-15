@@ -108,6 +108,6 @@ body {
   }
 
   h4 {
-    @apply pt-[15px] font-medium;
+    @apply font-medium;
   }
 }
