@@ -2,9 +2,8 @@ import React from "react";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import LessonCarousel from "./_components/lesson-carousel";
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
-import Link from "next/link";
+import LessonCard from "./_components/lesson-card";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   return (
@@ -43,7 +42,7 @@ export default function Home() {
           </div>
           <div
             id="recent-lesson-section"
-            className="md:pt-16 pt-8 md:pb-8 pb-4"
+            className="md:pt-16 pt-8 md:pb-8 pb-4 w-full"
           >
             <h2 className="font-semibold">Recent Lesson Slideshow</h2>
             <div
@@ -51,63 +50,113 @@ export default function Home() {
               className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
             >
               {Array.from({ length: 6 }).map((_, index) => (
-                <Card key={index} className="border">
-                  <CardContent className="p-0">
-                    <Image
-                      src="https://placehold.co/500x300.jpg"
-                      alt="Slider Image"
-                      width={400}
-                      height={300}
-                      className="w-full"
-                    />
-                  </CardContent>
-                  <div id="card-footer" className="p-5">
-                    <div className="grid grid-cols-2 w-full">
-                      <div id="recent-headers">
-                        <h4>General Mathematics</h4>
-                        <h5 className="text-primary">Math</h5>
-                      </div>
-                      <div id="slide-logos">
-                        <div className="flex gap-2 justify-end">
-                          <Link href="https://www.canva.com" target="_blank">
-                            <Image
-                              src="/assets/canva.svg"
-                              alt="Canva Icon"
-                              width={32}
-                              height={32}
-                              className="w-8 h-8"
-                            />
-                          </Link>
-                          <Link
-                            href="https://www.google.com/slides/about/"
-                            target="_blank"
-                          >
-                            <Image
-                              src="/assets/google-slide.svg"
-                              alt="Google Slide Icon"
-                              width={32}
-                              height={32}
-                              className="w-8 h-8"
-                            />
-                          </Link>
-                          <Link
-                            href="https://www.microsoft.com/en-us/microsoft-365/powerpoint"
-                            target="_blank"
-                          >
-                            <Image
-                              src="/assets/ppt.svg"
-                              alt="PPT Icon"
-                              width={32}
-                              height={32}
-                              className="w-8 h-8"
-                            />
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Card>
+                <LessonCard
+                  key={index}
+                  title="General Mathematics"
+                  category="Math"
+                  imageUrl="https://placehold.co/500x300.jpg"
+                />
               ))}
+            </div>
+            <div className="flex justify-center mt-11">
+              <Button>See More</Button>
+            </div>
+          </div>
+
+          <div
+            id="recent-lesson-section"
+            className="md:pt-16 pt-8 md:pb-8 pb-4 w-full"
+          >
+            <h2 className="font-semibold">Science</h2>
+            <div
+              id="recent-lesson-card"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            >
+              {Array.from({ length: 3 }).map((_, index) => (
+                <LessonCard
+                  key={index}
+                  title="DNA Lesson"
+                  category="Science"
+                  imageUrl="https://placehold.co/500x300.jpg"
+                />
+              ))}
+            </div>
+            <div className="flex justify-center mt-11">
+              <Button>See More</Button>
+            </div>
+          </div>
+
+          <div
+            id="recent-lesson-section"
+            className="md:pt-16 pt-8 md:pb-8 pb-4 w-full"
+          >
+            <h2 className="font-semibold">English</h2>
+            <div
+              id="recent-lesson-card"
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3"
+            >
+              {Array.from({ length: 3 }).map((_, index) => (
+                <LessonCard
+                  key={index}
+                  title="DNA Lesson"
+                  category="English"
+                  imageUrl="https://placehold.co/500x300.jpg"
+                />
+              ))}
+            </div>
+            <div className="flex justify-center mt-11">
+              <Button>See More</Button>
+            </div>
+          </div>
+
+          <div id="tags-section" className="md:py-20 py-16 w-full">
+            <h2 className="font-semibold">
+              Find free lesson’s that suit your needs
+            </h2>
+            <div className="grid md:grid-cols-2 gap-4">
+              <div id="topic">
+                <h3>Lesson’s by topic</h3>
+                <ul className="flex gap-x-2 gap-y-3 flex-wrap justify-start">
+                  {[
+                    "Filipino",
+                    "English",
+                    "Mathematics",
+                    "Science",
+                    "Social Studies",
+                    "Character Education",
+                    "Music",
+                    "Arts",
+                    "Physical Education",
+                    "Health",
+                  ].map((language, index) => (
+                    <li
+                      key={index}
+                      className="px-5 py-2 rounded bg-[#FCF7F1] text-sm font-medium"
+                    >
+                      {language}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div id="grade-level">
+                <h3>Lesson’s by Grade level</h3>
+                <ul className="flex gap-x-2 gap-y-3 flex-wrap justify-start">
+                  {[
+                    "Kindergarten",
+                    "Elementary School",
+                    "Junior High School",
+                    "Senior High School",
+                    "College",
+                  ].map((language, index) => (
+                    <li
+                      key={index}
+                      className="px-5 py-2 rounded bg-[#FCF7F1] text-sm font-medium"
+                    >
+                      {language}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             </div>
           </div>
         </div>

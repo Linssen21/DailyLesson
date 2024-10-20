@@ -20,6 +20,11 @@ const config: Config = {
         "h2-md": ["28px", { lineHeight: "1.2" }], // For medium screens
         "h2-lg": ["32px", { lineHeight: "1.2" }], // For large screens
         "h2-xl": ["36px", { lineHeight: "1.2" }], // For extra large screens
+
+        "h3-sm": ["20px", { lineHeight: "1.2" }], // Font size for smaller screens
+        "h3-md": ["22px", { lineHeight: "1.2" }], // For medium screens
+        "h3-lg": ["24px", { lineHeight: "1.2" }], // For large screens
+        "h3-xl": ["24px", { lineHeight: "1.2" }], // For extra large screens
       },
       colors: {
         background: "hsl(var(--background))",
