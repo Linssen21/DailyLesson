@@ -114,4 +114,12 @@ body {
   h4 {
     @apply font-medium;
   }
+
+  footer h4 {
+    @apply text-[20px] font-semibold uppercase md:pb-8 pb-4;
+  }
+
+  footer ul {
+    @apply space-y-3
+  }
 }
