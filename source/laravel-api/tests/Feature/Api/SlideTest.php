@@ -8,7 +8,7 @@ use App\Domains\Post\Common\Post;
 use App\Domains\Post\Common\PostMeta;
 use App\Domains\Post\Slides\Template;
 use App\Domains\Post\ValueObjects\PostStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Str;
 use Tests\TestCase;
 use Tests\Util;
@@ -16,7 +16,7 @@ use Tests\Util;
 class SlideTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private Util $util;
     private string $token;

@@ -14,7 +14,7 @@ use App\Domains\Post\Slides\SlidesMeta;
 use App\Domains\Post\Slides\Template;
 use App\Domains\Post\ValueObjects\PostStatus;
 use App\Domains\User\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
 use Tests\TestCase;
@@ -22,7 +22,7 @@ use Tests\TestCase;
 class SlideServiceTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private SlideService $slideService;
     /**

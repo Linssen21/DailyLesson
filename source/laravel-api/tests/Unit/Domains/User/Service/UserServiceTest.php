@@ -14,7 +14,7 @@ use App\Domains\User\User;
 use App\Domains\User\UserMeta;
 use App\Domains\User\ValueObjects\Status;
 use Hash;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Laravel\Sanctum\PersonalAccessToken;
 use Laravel\Socialite\Two\User as SocialUser;
@@ -34,7 +34,7 @@ use Tests\TestCase;
 class UserServiceTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
      * Create a mock user repository object, add reference with UserRepository Class and Mock Object class

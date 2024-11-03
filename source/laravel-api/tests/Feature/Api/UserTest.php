@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tests\Feature\Api;
 
 use App\Domains\User\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Tests\Util;
 
 class UserTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
     private Util $util;
 
     protected function setUp(): void
