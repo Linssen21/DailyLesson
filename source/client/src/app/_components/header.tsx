@@ -1,10 +1,18 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith("/admin");
+
+  if (isAdminRoute) return;
+
   return (
     <header className="flex sticky top-0 left-0 right-0 z-30 h-16 items-center gap-4 border-b bg-background px-4 xl:px-12 lg:px-8">
       <nav className="flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm md:flex-nowrap lg:gap-6">
