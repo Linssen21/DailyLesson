@@ -1,14 +1,8 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import "./globals.css";
 import Header from "./_components/header";
 import Footer from "./_components/footer";
-
-const inter = Inter({
-  subsets: ["latin"], // Specify subsets you need
-  variable: "--font-inter", // Custom variable if you want to use it in your CSS
-  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
-});
 
 export const metadata: Metadata = {
   title: "Create DailyLesson Website",
@@ -22,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>
+      <body className={`${GeistSans.className} antialiased`}>
         <Header />
         <main>{children}</main>
         <Footer />
