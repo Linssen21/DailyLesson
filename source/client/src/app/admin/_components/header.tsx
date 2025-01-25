@@ -17,6 +17,11 @@ import {
 } from "@/components/ui/popover";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 export default function AdminHeader() {
   const { toggleSidebar } = useSidebar();
@@ -37,13 +42,54 @@ export default function AdminHeader() {
           </div>
         </form>
       </div>
-      <div className="lg:inline-flex gap-3 hidden">
-        <Bookmark size={22} strokeWidth={1.5} />
-        <Settings size={22} strokeWidth={1.5} />
-        <BookOpen size={22} strokeWidth={1.5} />
-        <Globe size={22} strokeWidth={1.5} />
+
+      <div className="lg:inline-flex gap-2 hidden">
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="cursor-pointer p-2 rounded-full hover:bg-muted">
+              <Bookmark size={20} strokeWidth={1.5} className="" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Bookmarks</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="cursor-pointer p-2 rounded-full hover:bg-muted">
+              <Settings size={20} strokeWidth={1.5} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Settings</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="cursor-pointer p-2 rounded-full hover:bg-muted">
+              <BookOpen size={20} strokeWidth={1.5} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Libraries</p>
+          </TooltipContent>
+        </Tooltip>
+
+        <Tooltip>
+          <TooltipTrigger>
+            <div className="cursor-pointer p-2 rounded-full hover:bg-muted">
+              <Globe size={20} strokeWidth={1.5} />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>View site</p>
+          </TooltipContent>
+        </Tooltip>
       </div>
-      <div className="ml-6">
+
+      <div>
         <Popover>
           <PopoverTrigger asChild>
             <Avatar className="cursor-pointer">
