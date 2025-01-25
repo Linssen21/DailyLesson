@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   darkMode: ["class"],
@@ -10,21 +11,126 @@ const config: Config = {
   theme: {
     extend: {
       fontSize: {
-        "h1-sm": ["32px", { lineHeight: "1.2" }], // Font size for smaller screens
-        "h1-md": ["40px", { lineHeight: "1.2" }], // For medium screens
-        "h1-lg": ["48px", { lineHeight: "1.2" }], // For large screens
-        "h1-xl": ["56px", { lineHeight: "1.2" }], // For extra large screens
-
-        // Custom h2 font sizes
-        "h2-sm": ["24px", { lineHeight: "1.2" }], // Font size for smaller screens
-        "h2-md": ["28px", { lineHeight: "1.2" }], // For medium screens
-        "h2-lg": ["32px", { lineHeight: "1.2" }], // For large screens
-        "h2-xl": ["36px", { lineHeight: "1.2" }], // For extra large screens
-
-        "h3-sm": ["20px", { lineHeight: "1.2" }], // Font size for smaller screens
-        "h3-md": ["22px", { lineHeight: "1.2" }], // For medium screens
-        "h3-lg": ["24px", { lineHeight: "1.2" }], // For large screens
-        "h3-xl": ["24px", { lineHeight: "1.2" }], // For extra large screens
+        "h1-sm": [
+          "32px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h1-md": [
+          "40px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h1-lg": [
+          "48px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h1-xl": [
+          "56px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h2-sm": [
+          "24px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h2-md": [
+          "28px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h2-lg": [
+          "32px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h2-xl": [
+          "36px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h3-sm": [
+          "20px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h3-md": [
+          "22px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h3-lg": [
+          "24px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h3-xl": [
+          "24px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h4-sm": [
+          "16px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h4-md": [
+          "16px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h4-lg": [
+          "18px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h4-xl": [
+          "20px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h5-sm": [
+          "14px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h5-md": [
+          "16px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h5-lg": [
+          "18px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
+        "h5-xl": [
+          "20px",
+          {
+            lineHeight: "1.2",
+          },
+        ],
       },
       colors: {
         background: "hsl(var(--background))",
@@ -70,6 +176,16 @@ const config: Config = {
           "4": "hsl(var(--chart-4))",
           "5": "hsl(var(--chart-5))",
         },
+        sidebar: {
+          DEFAULT: "hsl(var(--sidebar-background))",
+          foreground: "hsl(var(--sidebar-foreground))",
+          primary: "hsl(var(--sidebar-primary))",
+          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
+          accent: "hsl(var(--sidebar-accent))",
+          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
+          border: "hsl(var(--sidebar-border))",
+          ring: "hsl(var(--sidebar-ring))",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -84,6 +200,6 @@ const config: Config = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [tailwindcssAnimate],
 };
 export default config;

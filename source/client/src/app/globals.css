@@ -56,12 +56,20 @@ body {
     --border: 0 0% 89.8%;
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
-    --chart-1: 12 76% 61%;
+    --chart-1: 200 76% 61%;
     --chart-2: 173 58% 39%;
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
     --radius: 0.5rem;
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
   .dark {
     --background: 0 0% 3.9%;
@@ -88,6 +96,14 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
   }
 }
 
@@ -112,11 +128,27 @@ body {
   }
 
   h4 {
-    @apply font-medium;
+    @apply text-h4-sm sm:text-h4-sm md:text-h4-lg lg:text-h4-xl font-medium;
+  }
+
+  h5 {
+    @apply text-h5-sm sm:text-h5-md md:text-h5-lg lg:text-h5-xl font-medium;
   }
 
   footer h4 {
     @apply text-[20px] font-semibold uppercase md:pb-8 pb-4;
+  }
+
+  .lesson-card h4, .lesson-carousel h4 {
+    @apply text-h4-sm
+  }
+
+  .lesson-card h5, .lesson-carousel h5 {
+    @apply text-h5-sm
+  }
+
+  .pop-up-links {
+    @apply px-1 py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-sm
   }
 
   footer ul {
