@@ -7,14 +7,14 @@ namespace Tests\Feature\Command;
 use App\Domains\User\Contracts\UserMetaRepository;
 use App\Domains\User\Contracts\UserRepository;
 use App\Domains\User\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
 class CreateAdminTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private string $nameOps;
     private string $emailOps;

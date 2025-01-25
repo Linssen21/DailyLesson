@@ -5,14 +5,14 @@ declare(strict_types=1);
 namespace Tests\Feature\Web;
 
 use App\Domains\User\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 class UserTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
     private User $user;
 
     public function test_verification(): void

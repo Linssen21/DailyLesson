@@ -11,14 +11,14 @@ use App\Domains\User\Service\AdminService;
 use App\Domains\User\User;
 use App\Domains\User\UserMeta;
 use Illuminate\Support\Facades\Hash;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery\MockInterface;
 use Tests\TestCase;
 
 class AdminServiceTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     /**
     * @var UserRepository&MockInterface
