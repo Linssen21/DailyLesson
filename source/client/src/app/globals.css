@@ -147,6 +147,10 @@ body {
     @apply text-h5-sm
   }
 
+  .pop-up-links {
+    @apply px-1 py-2 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground rounded-sm
+  }
+
   footer ul {
     @apply space-y-3
   }

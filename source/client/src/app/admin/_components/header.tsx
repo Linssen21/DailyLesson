@@ -10,6 +10,13 @@ import {
 } from "lucide-react";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { useSidebar } from "@/components/ui/sidebar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 export default function AdminHeader() {
   const { toggleSidebar } = useSidebar();
@@ -37,10 +44,35 @@ export default function AdminHeader() {
         <Globe size={22} strokeWidth={1.5} />
       </div>
       <div className="ml-6">
-        <Avatar>
-          <AvatarImage src="/assets/Bojji_2022_anime_ending.webp" />
-          <AvatarFallback>BD</AvatarFallback>
-        </Avatar>
+        <Popover>
+          <PopoverTrigger asChild>
+            <Avatar className="cursor-pointer">
+              <AvatarImage src="/assets/Bojji_2022_anime_ending.webp" />
+              <AvatarFallback>BD</AvatarFallback>
+            </Avatar>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-64">
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <div className="text-base leading-none">
+                  test.admin001@example.com
+                </div>
+                <Separator />
+                <div className="text-sm leading-none flex flex-col">
+                  <Link className="pop-up-links" href="/profile">
+                    Profile
+                  </Link>
+                  <Link className="pop-up-links" href="/preferences">
+                    Preferences
+                  </Link>
+                  <Link className="pop-up-links" href="/logout">
+                    Log out
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </header>
   );
