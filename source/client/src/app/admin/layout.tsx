@@ -11,7 +11,7 @@ export default function AdminLayout({
     <SidebarProvider>
       <AppSideBar />
       <AdminHeader />
-      <main className="bg-gray-300 w-full">{children}</main>
+      <main className="bg-gray-200 w-full py-20 lg:pt-36 px-5">{children}</main>
     </SidebarProvider>
   );
 }

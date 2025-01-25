@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function LessonCarouselItem() {
   return (
-    <CarouselItem className="basis-1/2 md:basis-1/3 xl:basis-1/4">
+    <CarouselItem className="lesson-carousel basis-1/2 md:basis-1/3 xl:basis-1/4">
       <Card className="border-0">
         <CardContent className="p-0">
           <Image

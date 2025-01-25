@@ -76,12 +76,12 @@ const toolItems: Items[] = [
 ];
 
 export default function AppSideBar() {
-  const { isMobile } = useSidebar();
+  const { isMobile, toggleSidebar } = useSidebar();
   return (
     <Sidebar>
       {isMobile == true ? (
         <SidebarHeader>
-          <X />
+          <X onClick={toggleSidebar} className="cursor-pointer" />
         </SidebarHeader>
       ) : (
         ""

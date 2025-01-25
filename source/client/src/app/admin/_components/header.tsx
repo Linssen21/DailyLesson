@@ -14,7 +14,7 @@ import { useSidebar } from "@/components/ui/sidebar";
 export default function AdminHeader() {
   const { toggleSidebar } = useSidebar();
   return (
-    <header className="flex absolute top-0 left-0 right-0 z-30 h-16 items-center gap-4 border-b bg-background px-4 xl:px-12 lg:px-8 shadow">
+    <header className="flex fixed top-0 left-0 right-0 z-30 h-16 items-center gap-4 border-b bg-background px-4 xl:px-12 lg:px-8 shadow">
       <Menu className="flex-shrink-0 cursor-pointer" onClick={toggleSidebar} />
 
       <div className="text-[#008dda] text-xl font-semibold">Lessons</div>
@@ -25,12 +25,12 @@ export default function AdminHeader() {
             <Input
               type="search"
               placeholder="Search..."
-              className="border border-gray-400 pl-10 md:w-[400px] lg:w-[650px]"
+              className="border border-gray-400 pl-10 md:w-[400px] lg:w-[500px] xl:w-[650px]"
             />
           </div>
         </form>
       </div>
-      <div className="inline-flex gap-3">
+      <div className="lg:inline-flex gap-3 hidden">
         <Bookmark size={22} strokeWidth={1.5} />
         <Settings size={22} strokeWidth={1.5} />
         <BookOpen size={22} strokeWidth={1.5} />

@@ -10,7 +10,7 @@ interface CardProps {
 
 export default function LessonCard(props: CardProps) {
   return (
-    <Card className="border overflow-hidden">
+    <Card className="lesson-card border overflow-hidden">
       <CardContent className="p-0">
         <Image
           src={props.imageUrl}
