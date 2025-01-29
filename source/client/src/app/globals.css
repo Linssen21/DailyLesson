@@ -154,4 +154,14 @@ body {
   footer ul {
     @apply space-y-3
   }
+
+  .hover-hidden {
+    @apply transition-opacity transition-all duration-500 ease-in-out opacity-0 
+  }
+
+  .hover-show {
+    @apply opacity-100 
+  }
+
+
 }
