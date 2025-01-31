@@ -11,7 +11,7 @@ use App\Domains\User\User;
 use App\Domains\User\UserMeta;
 use App\Http\Middleware\AdminAuthentication;
 use Carbon\Carbon;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Http\Request;
 use Mockery\MockInterface;
@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 class AdminAuthenticationTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private AdminService $adminService;
     /**

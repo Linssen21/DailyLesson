@@ -4,13 +4,14 @@ namespace Tests\Feature\Api;
 
 use App\Domains\User\User;
 use App\Domains\User\UserMeta;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     protected function setUp(): void
     {

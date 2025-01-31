@@ -8,7 +8,7 @@ use App\Domains\Post\Common\ImageDetail;
 use App\Domains\Post\Common\MediaDetail;
 use App\Domains\Post\Common\Post;
 use App\Feature\Upload\Dimension;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 use Tests\Util;
@@ -16,7 +16,7 @@ use Tests\Util;
 class UploadTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private Util $util;
     private string $token;

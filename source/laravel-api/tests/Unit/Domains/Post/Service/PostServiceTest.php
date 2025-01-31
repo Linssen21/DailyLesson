@@ -12,7 +12,7 @@ use App\Domains\Post\Service\PostService;
 use App\Domains\Post\Slides\Slides;
 use App\Domains\Post\Slides\Template;
 use App\Domains\Post\ValueObjects\PostStatus;
-use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Mockery\MockInterface;
@@ -22,7 +22,7 @@ use Tests\TestCase;
 class PostServiceTest extends TestCase
 {
     // Rollback database changes
-    use RefreshDatabase;
+    use DatabaseTransactions;
 
     private PostService $postService;
     private Slides $slidesMock;
