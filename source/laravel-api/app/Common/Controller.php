@@ -16,7 +16,10 @@ abstract class Controller
      */
     protected function response(array $result): JsonResponse
     {
-        $status = $result['status'] == config('constants.STATUS_SUCCESS') ? 200 : 500;
+        $status = $result['status'];
+        if(is_bool($status)) {
+            $status = $status ? 200 : 400;
+        }
         return response()->json($result, $status);
     }
 }

@@ -49,6 +49,6 @@ class UserTest extends TestCase
         $response = $this->get($verificationUrl);
 
         // Assert
-        $response->assertStatus(500);
+        $response->assertStatus(422);
     }
 }
