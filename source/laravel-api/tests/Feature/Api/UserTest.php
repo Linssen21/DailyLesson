@@ -90,7 +90,7 @@ class UserTest extends TestCase
         ]);
 
         // Assert
-        $response->assertStatus(500)
+        $response->assertStatus(400)
             ->assertJson([
                 'status' => config('constants.STATUS_FAILED'),
             ]);

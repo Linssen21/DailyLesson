@@ -49,11 +49,11 @@ class AdminTest extends TestCase
     public function test_admin_login_fail(): void
     {
         $response = $this->postJson('/api/v2/admin/login', [
-            'email' => 'testadmin1@test.com',
+            'email' => 'testadmininvalid@test.com',
             'password' => 'testpassadmin'
         ]);
 
-        $response->assertStatus(500)
+        $response->assertStatus(400)
             ->assertJson([
                 'status' => config('constants.STATUS_FAILED'),
             ]);

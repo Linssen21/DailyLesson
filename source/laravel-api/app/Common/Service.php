@@ -44,4 +44,12 @@ class Service
         ];
     }
 
+    protected function messageReponseStatus(string $message, int $status): array
+    {
+        return [
+            'message' => $message,
+            'status' => $status
+        ];
+    }
+
 }
