@@ -38,7 +38,7 @@ class UserController
         $aryRes = $this->userService->verify($intId);
 
         if ($aryRes['status'] == config('constants.STATUS_FAILED')) {
-            abort(500);
+            abort(422);
         }
 
         return redirect()->intended(
