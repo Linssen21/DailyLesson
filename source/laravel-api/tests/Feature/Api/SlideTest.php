@@ -176,7 +176,7 @@ class SlideTest extends TestCase
             ->assertJsonFragment([
                 'title' => "Test Slide title 111",
                 'title' => "Test Slide title 122",
-                'title' => "Test Slide title 133",
+                'title' => "Test Slide title 133"
             ]);
 
     }
@@ -201,6 +201,31 @@ class SlideTest extends TestCase
                 'title' => "Test Slide title 111",
                 'title' => "Test Slide title 122",
                 'title' => "Test Slide title 133",
+            ]);
+
+    }
+
+    public function test_get_per_page(): void
+    {
+        // Arrange
+        $this->createSlide(111);
+        $this->createSlide(122);
+        $this->createSlide(133);
+        $this->createSlide(222);
+        $this->createSlide(333);
+
+        // Act
+        $response = $this->get("/api/v2/slide/get?per_page=10");
+        $response->assertStatus(200)
+            ->assertJson([
+                'status' => config('constants.STATUS_SUCCESS'),
+            ])
+            ->assertJsonFragment([
+                'title' => "Test Slide title 111",
+                'title' => "Test Slide title 122",
+                'title' => "Test Slide title 133",
+                'title' => "Test Slide title 222",
+                'title' => "Test Slide title 333",
             ]);
 
     }
