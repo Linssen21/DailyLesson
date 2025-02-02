@@ -62,7 +62,7 @@ class SlideController extends Controller
             $columns,
             $request->getFields(),
             $request->input('page', 1),
-            $request->input('per_page', 10),
+            (int) $request->input('per_page', 10),
             "=",
             $request->getOrder()
         );
