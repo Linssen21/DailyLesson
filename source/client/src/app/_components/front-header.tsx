@@ -57,7 +57,7 @@ export default function FrontHeader() {
         </form>
         <div id="profile-container">
           <Button asChild>
-            <Link href="/login">Log In</Link>
+            <Link href="/account/login">Log In</Link>
           </Button>
         </div>
       </div>

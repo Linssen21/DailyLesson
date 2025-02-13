@@ -5,9 +5,10 @@ import { usePathname } from "next/navigation";
 
 export default function Footer() {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith("/admin");
+  const isExcludedRoute =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/account");
 
-  if (isAdminRoute) return;
+  if (isExcludedRoute) return;
   return (
     <footer className="bg-black text-white">
       <div className="max-w-8xl mx-auto px-5 md:py-20 py-14">
