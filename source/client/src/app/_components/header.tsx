@@ -5,9 +5,10 @@ import FrontHeader from "./front-header";
 
 export default function Header() {
   const pathname = usePathname();
-  const isAdminRoute = pathname?.startsWith("/admin");
+  const isExcludedRoute =
+    pathname?.startsWith("/admin") || pathname?.startsWith("/account");
 
-  if (isAdminRoute) {
+  if (isExcludedRoute) {
     return;
   }
 
