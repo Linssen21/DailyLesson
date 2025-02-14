@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 // Setup the password validation
-export const passwordSchema = z
+const passwordSchema = z
   .string()
   .min(8, { message: "Password must be at least 8 characters." })
   .max(20, { message: "Password must not be greater than 20 characters." })
@@ -16,4 +16,29 @@ export const passwordSchema = z
   })
   .refine((password) => /[!@#$%^&*]/.test(password), {
     message: "Password must contain at least one special character (!@#$%^&*).",
+  });
+
+// Setup the shape/schema and validation of the Sign Up form
+export const logInFormSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .min(10, { message: "Email must be at least 10 characters." }),
+  password: passwordSchema,
+  stayLogin: z.boolean().optional(),
+});
+
+// Setup the shape/schema and validation of the Sign Up form
+export const signUpFormSchema = z
+  .object({
+    email: z
+      .string()
+      .email({ message: "Invalid email address" })
+      .min(10, { message: "Email must be at least 10 characters." }),
+    password: passwordSchema,
+    confirmPassword: z.string(),
+  })
+  .refine((data) => data.password === data.confirmPassword, {
+    message: "Passwords do not match.",
+    path: ["confirmPassword"],
   });

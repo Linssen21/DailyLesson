@@ -4,6 +4,7 @@ export default function AuthLayout({
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-[1fr_2fr]">
       {children}
+      <div className="bg-[url(/assets/auth-bg.webp)] bg-cover bg-no-repeat h-screen hidden md:block"></div>
     </div>
   );
 }
